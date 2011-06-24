@@ -11,9 +11,23 @@ class DeliverableInline(admin.StackedInline):
     
 class StateAdmin(admin.GeoModelAdmin):
     exclude = ['shape']
+    list_display = ['name',
+                    'temp_completion', 
+                    'wchem_completion',
+                    'tect_completion',
+                    'other_completion',
+                    'meta_completion',
+                    'map_completion',
+                    'lith_completion',
+                    'rchem_completion',
+                    'submissions_in_review']
+    
     inlines = [DeliverableInline]
     
 class SubmissionAdmin(admin.GeoModelAdmin):
+    list_filter = ['state', 'status']
+    list_display = ['__unicode__', 'date_submitted', 'status']
+    
     inlines = [CommentInline]
     
 admin.site.register(State, StateAdmin)
