@@ -16,7 +16,5 @@ class StateAdmin(admin.GeoModelAdmin):
 class SubmissionAdmin(admin.GeoModelAdmin):
     inlines = [CommentInline]
     
-    
-
 admin.site.register(State, StateAdmin)
 admin.site.register(Submission, SubmissionAdmin)
