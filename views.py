@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseNotAllowed
+from django.http import HttpResponse, HttpResponseNotAllowed, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, STATUS
@@ -15,7 +15,10 @@ def standard_context(additionals):
 
     return context
 
-def state_progress(request, state, category=None, context='full'):
+def state_progress(request, state, category, context):
+    # If no context is specified, "full" is the default
+    if context is None: context = 'full'
+    
     # Only GET commands are allowed
     valid_requests = ['GET']
     if request.META['REQUEST_METHOD'] not in valid_requests:
@@ -34,10 +37,10 @@ def state_progress(request, state, category=None, context='full'):
         deliverables = state.deliverable_set.all()
     
     # Get submissions that address these deliverables
-    submissions = deliverables.submission_set.all()
+    submissions = Submission.objects.filter(satisfies_deliverable__in=deliverables)
     
     # Get comments that pertain to these submissions
-    comments = submissions.submissioncomment_set.all()
+    comments = SubmissionComment.objects.filter(submission__in=submissions)
     
     # Build context for the templates
     additional_context = {'comments': comments,
