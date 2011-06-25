@@ -21,7 +21,10 @@ SUBMISSION_STATUS = (('submitted', 'Submitted'),
                      ('approved', 'Approved'),
                      ('online', 'Online'))
 
-
+STATUS = dict()
+for item in SUBMISSION_STATUS:
+    STATUS[item[0]] = item[1]
+    
 def completion_calc(state, category):
     if category not in CATEGORIES: return None
         
