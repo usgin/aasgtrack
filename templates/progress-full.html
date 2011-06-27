@@ -1,0 +1,41 @@
+{% extends "aasgtrack/progress-base.html" %}
+{% load filters %}
+
+{% block scripts %}
+	<script type="text/javascript">
+		dojo.require("dijit.layout.AccordionContainer");
+		dojo.addOnLoad(function() { 
+			activeState = dijit.byId("{{ state.abbreviation|lower }}-sidebar");
+			accordion = dijit.byId("sidebar-accordion");
+			accordion.selectChild(activeState);
+		});
+	</script>
+{% endblock %}
+
+{% block header %}
+	<h2>{{ state.name }}</h2>
+	{% if category %}
+		<h3>Progress Report for {{ category }} Deliverables</h3>
+	{% else %}
+		<h3>Progress Report</h3>
+	{% endif %}
+{% endblock %}
+
+{% block sidebar %}
+	<div dojoType="dijit.layout.AccordionContainer" id="sidebar-accordion" style="height: 100%; overflow-y: scroll;">
+		{% for member in states %}
+			<div dojoType="dijit.layout.ContentPane" title="{{ member.name }}" id="{{ member.abbreviation|lower }}-sidebar">
+				<ul>
+					{% for cat in category_codes %}
+					<li><a href="/track/{{ member.abbreviation|lower }}/{{ cat }}/full">{{ category_codes|get:cat }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+{% block content %}
+<p>Main content</p>
+{% endblock %}
+

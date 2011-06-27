@@ -8,7 +8,8 @@ VALID_CONTEXTS = ['full', 'popup']
 def standard_context(additionals):
     context = {'media_url': settings.MEDIA_URL,
                'status_codes': STATUS,
-               'cateogy_codes': CATEGORIES}
+               'category_codes': CATEGORIES,
+               'states': State.objects.all(),}
     
     for item in additionals:
         context[item] = additionals[item]
@@ -45,7 +46,8 @@ def state_progress(request, state, category, context):
     # Build context for the templates
     additional_context = {'comments': comments,
                           'submissions': submissions, 
-                          'deliverables': deliverables}
+                          'deliverables': deliverables,
+                          'state': state}
     if category != None: additional_context['category'] = CATEGORIES[category]
     template_context = standard_context(additional_context)
     
