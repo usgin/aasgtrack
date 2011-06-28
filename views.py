@@ -61,5 +61,11 @@ def state_progress(request, state, category, context):
         #  item in the VALID_CONTEXTS variable. You can only get here if that is botched.
         return HttpResponse('Sorry, there was an error', status=500)
     
+def progress_map(request):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META['REQUEST_METHOD'] not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
     
+    return render_to_response('aasgtrack/map-base.html', standard_context({}))
     
