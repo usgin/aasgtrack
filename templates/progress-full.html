@@ -1,9 +1,20 @@
 {% extends "aasgtrack/progress-base.html" %}
 {% load filters %}
 
+{% block styles %}
+	<link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/dojox/layout/resources/ExpandoPane.css" />
+{% endblock %}
+
 {% block scripts %}
 	<script type="text/javascript">
 		dojo.require("dijit.layout.AccordionContainer");
+		dojo.require("dijit.TitlePane");
+		dojo.require("dijit.layout.SplitContainer");
+		dojo.require("dojox.layout.ExpandoPane");
+		dojo.require("dojox.layout.TableContainer");
+		dojo.require("dijit.form.TextBox");
+		dojo.require("dijit.form.Textarea");
+		dojo.require("dijit.layout.LinkPane")
 		dojo.addOnLoad(function() { 
 			activeState = dijit.byId("{{ state.abbreviation|lower }}-sidebar");
 			accordion = dijit.byId("sidebar-accordion");
@@ -14,18 +25,14 @@
 
 {% block header %}
 	<h2>{{ state.name }}</h2>
-	{% if category %}
-		<h3>Progress Report for {{ category }} Deliverables</h3>
-	{% else %}
-		<h3>Progress Report</h3>
-	{% endif %}
 {% endblock %}
 
 {% block sidebar %}
-	<div dojoType="dijit.layout.AccordionContainer" id="sidebar-accordion" style="height: 100%; overflow-y: scroll;">
+	<div dojoType="dijit.layout.AccordionContainer" region="left" id="sidebar-accordion" style="height: 100%; overflow-y: scroll;">
 		{% for member in states %}
 			<div dojoType="dijit.layout.ContentPane" title="{{ member.name }}" id="{{ member.abbreviation|lower }}-sidebar">
 				<ul>
+					<li><a href="/track/{{ member.abbreviation|lower }}">All Deliverables</a></li>
 					{% for cat in category_codes %}
 					<li><a href="/track/{{ member.abbreviation|lower }}/{{ cat }}/full">{{ category_codes|get:cat }}</a></li>
 					{% endfor %}
@@ -36,6 +43,38 @@
 {% endblock %}
 
 {% block content %}
-<p>Main content</p>
+	<div id="content-header">
+		{% if category %}
+			<h3>{{ category }} Deliverables</h3>
+		{% else %}
+			<h3>All Deliverables</h3>
+		{% endif %}
+	</div>
+	<div id="content-container" dojoType="dijit.layout.BorderContainer" style="width: 100%; height: 80%">
+		<div id="content-deliverable-wrapper" dojoType="dijit.layout.ContentPane" region="center">
+			{% for deliv in deliverables %}
+				<div id="deliverable-{{ deliv.pk }}" dojoType="dijit.TitlePane" open="false" title="{{ deliv.data_item }}">
+					<div id="deliverable-{{ deliv.pk}}-table" dojoType="dojox.layout.TableContainer" cols="1" customClass="deliverable-table">
+						<div id="deliverable-{{ deliv.pk }}-number" dojoType="dijit.form.TextBox" readOnly="true" title="No. of Items:" value="{{ deliv.number_of_items }}"></div>
+						<div id="deliverable-{{ deliv.pk }}-definition" dojoType="dijit.form.Textarea" readOnly="true" title="Definition:" value="{{ deliv.definition }}"></div>
+						<div id="deliverable-{{ deliv.pk }}-amount" dojoType="dijit.form.Textarea" readOnly="true" title="Amount of Data:" value="{{ deliv.amount_of_data }}"></div>
+						<div id="deliverable-{{ deliv.pk }}-delivery" dojoType="dijit.form.Textarea" readOnly="true" title="Delivery Plan:" value="{{ deliv.delivery_plan }}"></div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<div id="content-submission-wrapper" dojoType="dojox.layout.ExpandoPane" region="right" startExpanded="false" style="width: 50%" title="Submissions">
+			{% for sub in submissions %}
+				<div id="submission-{{ sub.pk }}" dojoType="dijit.TitlePane" open="false" title="{{ sub.file_name }}" class="submission-status-{{ sub.status }}">
+					<div id="submission-{{ sub.pk}}-table" dojoType="dojox.layout.TableContainer" cols="1" customClass="submission-table">
+						<div id="submission-{{ sub.pk }}-date" dojoType="dijit.form.TextBox" readOnly="true" title="Submitted On:" value="{{ sub.date_submitted }}"></div>
+						<div id="submission-{{ sub.pk }}-type" dojoType="dijit.form.TextBox" readOnly="true" title="Data Type:" value="{{ sub.data_type }}"></div>
+						<div id="submission-{{ sub.pk }}-location" dojoType="dijit.form.TextBox" readOnly="true" title="File Location:" value="{{ sub.file_location }}"></div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	
 {% endblock %}
 

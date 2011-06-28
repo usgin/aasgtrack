@@ -4,11 +4,8 @@
 	<head>
 	    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	    <title>{% block title %}AASG Submission Tracking{% endblock %}</title>
-	    <style type="text/css">
-	    	html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
-	    	#page-container { width: 100%; height: 100%; }
-	    </style>
-	    <link rel="stylesheet" href="{{ media_url }}aasgtrack/dijit/themes/claro/claro.css" media="screen">
+	    <link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/dijit/themes/claro/claro.css" />
+	    <link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/css/progress.css" />
 	    {% block styles %}{% endblock %}	
     		<script language="javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
     		<script type="text/javascript" src="{{ media_url }}aasgtrack/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -25,18 +22,17 @@
 		  		{% block header %}
 		  		{% endblock %}
 			</div>
-			<div dojoType="dijit.layout.ContentPane" splitter="false" region="left" style="width: 200px" id="sidebar">
-		  		{% block sidebar %}
-		  		{% endblock %}
-			</div>
+			{% block sidebar %}
+			{% endblock %}
 			<div dojoType="dijit.layout.ContentPane" splitter="true" region="center" id="content">
 		  		{% block content %}
 		  		{% endblock %}
 			</div>
-			<div dojoType="dijit.layout.ContentPane" splitter="false" region="bottom" style="width: 100%" id="footer">
-		  		{% block footer %}
-		  		{% endblock %}
-			</div>
+			{% block footer %}
+				<div dojoType="dijit.layout.ContentPane" splitter="false" region="bottom" style="width: 100%" id="footer">
+			  		<p>Arizona Geological Survey, 2011</p>
+				</div>
+			{% endblock %}
 		</div>
 	</body>
   	{% endblock %}
