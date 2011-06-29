@@ -33,7 +33,11 @@
 		{% for member in states %}
 			<div dojoType="dijit.layout.ContentPane" title="{{ member.name }}" id="{{ member.abbreviation|lower }}-sidebar">
 				<a href="/track/{{ member.abbreviation|lower }}" class="category-link">
-					<div id="{{ member.abbreviation|lower}}-all" dojoType="dijit.layout.ContentPane" class="category-button">All Deliverables</div>
+					{% if category %}
+						<div id="{{ member.abbreviation|lower}}-all" dojoType="dijit.layout.ContentPane" class="category-button">All Deliverables</div>
+					{% else %}
+						<div id="{{ member.abbreviation|lower}}-all" dojoType="dijit.layout.ContentPane" class="category-button category-active">All Deliverables</div>
+					{% endif %}
 				</a>					
 				{% for cat in category_codes %}
 					<a href="/track/{{ member.abbreviation|lower }}/{{ cat }}/full" class="category-link">
