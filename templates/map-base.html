@@ -81,18 +81,32 @@
 		        	  transparent: "true" }
 		        );
 		        
+		        var alaskaStateLayer = new OpenLayers.Layer.WMS(
+		        	"States: Contiguous",
+		        	"http://localhost:8080/geoserver/wms",
+		        	{ layers: ["aasg:StateContributionTracker"],
+		        	  transparent: "true" }
+		        );
+		        
+		        var hawaiiStateLayer = new OpenLayers.Layer.WMS(
+		        	"States: Contiguous",
+		        	"http://localhost:8080/geoserver/wms",
+		        	{ layers: ["aasg:StateContributionTracker"],
+		        	  transparent: "true" }
+		        );
+		        
 		        // Add the foreground layer to each map
 				continentalMap.addLayer(continentalStateLayer);
+				alaskaMap.addLayer(alaskaStateLayer);
+		        hawaiiMap.addLayer(hawaiiStateLayer);
 				
 		        // Add the background layer to each map
 		        continentalMap.addLayer(continentalLayer);		        
 		        alaskaMap.addLayer(alaskaLayer);
 		        hawaiiMap.addLayer(hawaiiLayer);
 				
-				
-				
 				// Setup center coordinates for each map				
-				var continentalCenterPoint = new OpenLayers.LonLat(-10591131, 4885637);
+				var continentalCenterPoint = new OpenLayers.LonLat(-10691131, 4705637);
 				var alaskaCenterPoint = new OpenLayers.LonLat(-16793594, 9376849);
 				var hawaiiCenterPoint = new OpenLayers.LonLat(-17532836, 2356488);
 				
