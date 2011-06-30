@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, STATUS
+from colorsys import hsv_to_rgb
 
 VALID_CONTEXTS = ['full', 'popup']
     
@@ -68,4 +69,46 @@ def progress_map(request):
         return HttpResponseNotAllowed(valid_requests)
     
     return render_to_response('aasgtrack/map-base.html', standard_context({}))
+
+def rgb_to_hex(r,g,b):
+    hexchars = "0123456789ABCDEF"
+    return "#" + hexchars[r / 16] + hexchars[r % 16] + hexchars[g / 16] + hexchars[g % 16] + hexchars[b / 16] + hexchars[b % 16]
+
+def category_sld(request, category):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META['REQUEST_METHOD'] not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
+    
+    # Make sure the category requested is correct
+    if category not in CATEGORIES: raise Http404
+    
+    # All we need is a dictionary: lookup category, get list of HEX colors
+    root_colors = {'temp': 0, 
+                   'wchem': float(45) / 360,
+                   'tect': float(90) / 360,
+                   'other': float(135) / 360,
+                   'meta': float(180) / 360,
+                   'map': float(225) / 360,
+                   'lith': float(270) / 360,
+                   'rchem': float(315) / 360}
+    
+    # Build HSV color ramp
+    hsv_color_ramp = []
+    for index in [0, 1, 2, 3, 4]:
+        hsv_color_ramp.append( ( root_colors[category], 1 - .18 * index, 1 ) )
+    
+    # Convert to RGB color ramp
+    rgb_color_ramp = []
+    for index in [0, 1, 2, 3, 4]:
+        hsv_color = hsv_color_ramp[index]
+        rgb_color_ramp.append( hsv_to_rgb( hsv_color[0], hsv_color[1], hsv_color[2] ) )
+    
+    # Convert to HEX color ramp
+    hex_color_ramp = []
+    for index in [0, 1, 2, 3, 4]:
+        rgb_color = rgb_color_ramp[index]
+        hex_color_ramp.append( rgb_to_hex( int(round(255*rgb_color[0])), int(round(255*rgb_color[1])), int(round(255*rgb_color[2])) ) )
+        
+    return render_to_response('aasgtrack/category-style.sld', standard_context({ 'category': category, 'colors': hex_color_ramp }), mimetype="application/xml")
     
