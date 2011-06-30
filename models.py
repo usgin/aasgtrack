@@ -48,7 +48,7 @@ class State(models.Model):
         
     abbreviation = models.CharField(max_length=2)
     name = models.CharField(max_length=50)
-    shape = models.MultiPolygonField(srid=900913)
+    shape = models.MultiPolygonField(srid=3857)
     objects = models.GeoManager()
     
     def __unicode__(self):
