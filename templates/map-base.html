@@ -11,7 +11,13 @@
 		<script src="{{ media_url }}aasgtrack/ext-3.2.1/ext-all.js"  type="text/javascript"></script>
 		<script src="{{ media_url }}aasgtrack/OpenLayers-2.10/OpenLayers.js" type="text/javascript"></script>
 		<script src="{{ media_url }}aasgtrack/GeoExt/lib/GeoExt.js" type="text/javascript"></script>
-		<script type="text/javascript">			
+		<script type="text/javascript">
+			var globalMap;
+			
+			function mapEvent(event) {
+				alert(globalMap.getExtent())
+			}	
+					
 		    Ext.onReady(function() {
 				// Build customized mapOptions for each map
 				//  Setting resolutions to just one value sets the zoom-scale to that value    				   		     
@@ -20,7 +26,7 @@
 	    				   		   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	    				   		   maxResolution: 156543.0339,
 	    				   		   resolutions: [ 6650 ],
-	    				   		   units: "m" 
+	    				   		   units: "m", 
     				   		     };
     			
     			var alaskaMapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
@@ -28,21 +34,22 @@
 	    				   		   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	    				   		   maxResolution: 156543.0339,
 	    				   		   resolutions: [ 25650 ],
-	    				   		   units: "m" 
+	    				   		   units: "m", 
     				   		     };
     			
     			var hawaiiMapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
 	    				   		   controls: new OpenLayers.Control.Attribution(),
 	    				   		   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	    				   		   maxResolution: 156543.0339,
-	    				   		   resolutions: [ 6650 ],
-	    				   		   units: "m" 
+	    				   		   resolutions: [ 4891.969809375 ],
+	    				   		   units: "m", 
     				   		     };
 				
 				// Build all the OpenLayers.Maps    			   		     		
 		        var continentalMap = new OpenLayers.Map("map", continentalMapOptions);
 		        var alaskaMap = new OpenLayers.Map("map", alaskaMapOptions);
 		        var hawaiiMap = new OpenLayers.Map("map", hawaiiMapOptions);
+		        globalMap = hawaiiMap;
 		        
 		        // Create the background layers		
 		        var continentalLayer = new OpenLayers.Layer.WMS(
@@ -73,10 +80,12 @@
 								
 				var continentalCenterPoint = new OpenLayers.LonLat(-10591131, 4885637);
 				var alaskaCenterPoint = new OpenLayers.LonLat(-16793594, 9376849);
-				var hawaiiCenterPoint = new OpenLayers.LonLat(-10591131, 4885637);
+				var hawaiiCenterPoint = new OpenLayers.LonLat(-17532836, 2356488);
 				
 				// Build GeoExt.MapPanels
-				var marginValue = 10;
+				var marginValue = 5;
+				var alaskaHeight = 200;
+				var hawaiiHeight = 125;
 				
 		        var continentalMapPanel = new GeoExt.MapPanel({	
 		            map: continentalMap,
@@ -92,37 +101,35 @@
 		        	map: alaskaMap,		        	
 		        	center: alaskaCenterPoint,
 		        	width: 225,
-		        	height: 200,
+		        	height: alaskaHeight,
 		        	x: marginValue,
-		        	y: continentalMapPanel.height - 200 - marginValue,
+		        	y: continentalMapPanel.height - alaskaHeight - marginValue,
+		        	bodyStyle: { border: "1px solid black" },
 		        });
 		        
 		        var hawaiiMapPanel = new GeoExt.MapPanel({
 		        	map: hawaiiMap,		        	
 		        	center: hawaiiCenterPoint,
-		        	width: 200,
-		        	height: 150,
+		        	width: 150,
+		        	height: hawaiiHeight,
 		        	x: marginValue + alaskaMapPanel.width + marginValue,
-		        	y: continentalMapPanel.height - 150 - marginValue,
+		        	y: continentalMapPanel.height - hawaiiHeight - marginValue,
+		        	bodyStyle: { border: "1px solid black" },
 		        });
 		        
 				// Build the Page Layout				
 				var vp = new Ext.Viewport({
-			        layout: "absolute",
-			        renderTo: "map",			    
-			        items: [ continentalMapPanel,
-			        		 alaskaMapPanel,
-			        		 hawaiiMapPanel ]
+			        layout: "border",
+			        renderTo: "map",
+			        defaults: { autoScroll: true },			    
+			        items: [ { layout: "absolute",
+			        		   region: "center",
+			        		   items: [ continentalMapPanel,
+			        		 		    alaskaMapPanel,
+			        		 			hawaiiMapPanel ]
+			        		 }
+			        	   ]	
 		        });
-		        
-		        // Find the Window's Size
-		        //var size = vp.getSize ();
-		        
-		        
-		        
-		        // Add the Alaska Panel to the display
-		        //vp.add(alaskaMapPanel);
-		        //vp.doLayout();
 		    });
 		</script>
 	    {% block scripts %}{% endblock %}
