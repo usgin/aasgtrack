@@ -5,64 +5,124 @@
 	    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	    <title>{% block title %}AASG Submission Tracking{% endblock %}</title>
 		<link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/ext-3.2.1/resources/css/ext-all.css" />
-		<link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/GeoExt/resources/css/geoext-all-debug.css" />	    
+		<link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/GeoExt/resources/css/geoext-all-debug.css" />
 	    {% block styles %}{% endblock %}	
     	<script src="{{ media_url }}aasgtrack/ext-3.2.1/adapter/ext/ext-base.js" type="text/javascript"></script>
 		<script src="{{ media_url }}aasgtrack/ext-3.2.1/ext-all.js"  type="text/javascript"></script>
 		<script src="{{ media_url }}aasgtrack/OpenLayers-2.10/OpenLayers.js" type="text/javascript"></script>
 		<script src="{{ media_url }}aasgtrack/GeoExt/lib/GeoExt.js" type="text/javascript"></script>
-		<script type="text/javascript">
+		<script type="text/javascript">			
 		    Ext.onReady(function() {
-		    	// Setup the OpenLayers.Map
-		    	var mapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
-	    				   		   controls: new OpenLayers.Control.Attribution()};		
-		        var mainMap = new OpenLayers.Map(options=mapOptions);
+				// Build customized mapOptions for each map
+				//  Setting resolutions to just one value sets the zoom-scale to that value    				   		     
+    			var continentalMapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
+	    				   		   controls: new OpenLayers.Control.Attribution(),
+	    				   		   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+	    				   		   maxResolution: 156543.0339,
+	    				   		   resolutions: [ 6650 ],
+	    				   		   units: "m" 
+    				   		     };
+    			
+    			var alaskaMapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
+	    				   		   controls: new OpenLayers.Control.Attribution(),
+	    				   		   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+	    				   		   maxResolution: 156543.0339,
+	    				   		   resolutions: [ 25650 ],
+	    				   		   units: "m" 
+    				   		     };
+    			
+    			var hawaiiMapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
+	    				   		   controls: new OpenLayers.Control.Attribution(),
+	    				   		   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+	    				   		   maxResolution: 156543.0339,
+	    				   		   resolutions: [ 6650 ],
+	    				   		   units: "m" 
+    				   		     };
+				
+				// Build all the OpenLayers.Maps    			   		     		
+		        var continentalMap = new OpenLayers.Map("map", continentalMapOptions);
+		        var alaskaMap = new OpenLayers.Map("map", alaskaMapOptions);
+		        var hawaiiMap = new OpenLayers.Map("map", hawaiiMapOptions);
 		        
-		        // Create Layers		
-		        var backgroundLayer = new OpenLayers.Layer.WMS(
+		        // Create the background layers		
+		        var continentalLayer = new OpenLayers.Layer.WMS(
 		            "Continents",
 		            "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
-		            { layers: ["0", "1"] },
-		            { "sphericalMercator": true }		           
+		            { layers: ["0", "1"], 
+		              format: "image/png" }
 		        );
-		        mainMap.addLayer(backgroundLayer);		        
+		        
+		        var alaskaLayer = new OpenLayers.Layer.WMS(
+		            "Continents",
+		            "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
+		            { layers: ["0", "1"], 
+		              format: "image/png" }
+		        );
+		        
+		        var hawaiiLayer = new OpenLayers.Layer.WMS(
+		            "Continents",
+		            "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
+		            { layers: ["0", "1"], 
+		              format: "image/png" }
+		        );
+		        
+		        // Add the background layer to each map
+		        continentalMap.addLayer(continentalLayer);		        
+		        alaskaMap.addLayer(alaskaLayer);
+		        hawaiiMap.addLayer(hawaiiLayer);
+								
+				var continentalCenterPoint = new OpenLayers.LonLat(-10591131, 4885637);
+				var alaskaCenterPoint = new OpenLayers.LonLat(-16793594, 9376849);
+				var hawaiiCenterPoint = new OpenLayers.LonLat(-10591131, 4885637);
 				
-				var centerPoint = new OpenLayers.LonLat(-98.58333, 35.83333);
+				// Build GeoExt.MapPanels
+				var marginValue = 10;
 				
-				// Put the Map into a GeoExt.MapPanel
-		        var continentalMapPanel = new GeoExt.MapPanel({
-		            height: "100%",
-		            width: "100%",
-		            map: mainMap,
+		        var continentalMapPanel = new GeoExt.MapPanel({	
+		            map: continentalMap,
 		            title: "State Geothermal Data Contribution Status",
-		            //center: centerPoint,
-		            zoom: 4,
-		            region: "center",
+		            center: continentalCenterPoint,
+		            height: 768,
+		            width: 1024,
+		            x: 0,
+		            y: 0,
 		        });		        		   
 		        
-				// Build the Page Layout
+		        var alaskaMapPanel = new GeoExt.MapPanel({
+		        	map: alaskaMap,		        	
+		        	center: alaskaCenterPoint,
+		        	width: 225,
+		        	height: 200,
+		        	x: marginValue,
+		        	y: continentalMapPanel.height - 200 - marginValue,
+		        });
+		        
+		        var hawaiiMapPanel = new GeoExt.MapPanel({
+		        	map: hawaiiMap,		        	
+		        	center: hawaiiCenterPoint,
+		        	width: 200,
+		        	height: 150,
+		        	x: marginValue + alaskaMapPanel.width + marginValue,
+		        	y: continentalMapPanel.height - 150 - marginValue,
+		        });
+		        
+				// Build the Page Layout				
 				var vp = new Ext.Viewport({
-			        layout: "border",
+			        layout: "absolute",
 			        renderTo: "map",			    
-			        items: [ continentalMapPanel ]
+			        items: [ continentalMapPanel,
+			        		 alaskaMapPanel,
+			        		 hawaiiMapPanel ]
 		        });
 		        
 		        // Find the Window's Size
-		        var size = vp.getSize ();
+		        //var size = vp.getSize ();
 		        
-		        // Make the Alaska Panel
-		        var alaskaMapPanel = new Ext.Panel({
-		        	layout: "absolute",
-		        	width: 200,
-		        	height: 200,
-		        	title: "Alaska",
-		        	x: 50,
-		        	y: size.height - 250,
-		        });
+		        
 		        
 		        // Add the Alaska Panel to the display
-		        vp.add(alaskaMapPanel);
-		        vp.doLayout();
+		        //vp.add(alaskaMapPanel);
+		        //vp.doLayout();
 		    });
 		</script>
 	    {% block scripts %}{% endblock %}
