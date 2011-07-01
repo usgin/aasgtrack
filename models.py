@@ -142,5 +142,23 @@ class SubmissionComment(models.Model):
     
     def __unicode__(self):
         return str(self.date) + ' -- ' + self.submission.__unicode__()
+    
+class StateCompletion(models.Model):
+    class Meta:
+        ordering = ['state']
+        
+    state = models.ForeignKey('State')
+    temp = models.FloatField(null=True)
+    wchem = models.FloatField(null=True)
+    tect = models.FloatField(null=True)
+    other = models.FloatField(null=True)
+    meta = models.FloatField(null=True)
+    map = models.FloatField(null=True)
+    lith = models.FloatField(null=True)
+    rchem = models.FloatField(null=True)
+    objects = models.GeoManager()
+    
+    def __unicode__(self):
+        return self.state.abbreviation + ": Completion"
 
 

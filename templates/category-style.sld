@@ -13,7 +13,7 @@
           <Title>100-80</Title>
           <ogc:Filter>
             <ogc:PropertyIsBetween>
-              <ogc:PropertyName>completion</ogc:PropertyName>
+              <ogc:PropertyName>{{ category }}</ogc:PropertyName>
               <ogc:LowerBoundary>
                 <ogc:Literal>80</ogc:Literal>
               </ogc:LowerBoundary>
@@ -27,14 +27,18 @@
                 <!-- CssParameters allowed are fill (the color) and fill-opacity -->
                 <CssParameter name="fill">{{ colors.0 }}</CssParameter>
                 <CssParameter name="fill-opacity">1.0</CssParameter>
-             </Fill>     
+             </Fill>
+             <Stroke>
+                <CssParameter name="stroke">#FAFAFA</CssParameter>
+                <CssParameter name="stroke-width">0.5</CssParameter>
+             </Stroke>      
           </PolygonSymbolizer>
         </Rule>
         <Rule>
           <Title>79-60</Title>
           <ogc:Filter>
             <ogc:PropertyIsBetween>
-              <ogc:PropertyName>completion</ogc:PropertyName>
+              <ogc:PropertyName>{{ category }}</ogc:PropertyName>
               <ogc:LowerBoundary>
                 <ogc:Literal>60</ogc:Literal>
               </ogc:LowerBoundary>
@@ -48,14 +52,18 @@
                 <!-- CssParameters allowed are fill (the color) and fill-opacity -->
                 <CssParameter name="fill">{{ colors.1 }}</CssParameter>
                 <CssParameter name="fill-opacity">1.0</CssParameter>
-             </Fill>     
+             </Fill>
+             <Stroke>
+                <CssParameter name="stroke">#FAFAFA</CssParameter>
+                <CssParameter name="stroke-width">0.5</CssParameter>
+             </Stroke>      
           </PolygonSymbolizer>
         </Rule>
         <Rule>
           <Title>59-40</Title>
           <ogc:Filter>
             <ogc:PropertyIsBetween>
-              <ogc:PropertyName>completion</ogc:PropertyName>
+              <ogc:PropertyName>{{ category }}</ogc:PropertyName>
               <ogc:LowerBoundary>
                 <ogc:Literal>40</ogc:Literal>
               </ogc:LowerBoundary>
@@ -69,14 +77,18 @@
                 <!-- CssParameters allowed are fill (the color) and fill-opacity -->
                 <CssParameter name="fill">{{ colors.2 }}</CssParameter>
                 <CssParameter name="fill-opacity">1.0</CssParameter>
-             </Fill>     
+             </Fill>
+             <Stroke>
+                <CssParameter name="stroke">#FAFAFA</CssParameter>
+                <CssParameter name="stroke-width">0.5</CssParameter>
+             </Stroke>      
           </PolygonSymbolizer>
         </Rule>
         <Rule>
           <Title>39-20</Title>
           <ogc:Filter>
             <ogc:PropertyIsBetween>
-              <ogc:PropertyName>completion</ogc:PropertyName>
+              <ogc:PropertyName>{{ category }}</ogc:PropertyName>
               <ogc:LowerBoundary>
                 <ogc:Literal>20</ogc:Literal>
               </ogc:LowerBoundary>
@@ -90,14 +102,18 @@
                 <!-- CssParameters allowed are fill (the color) and fill-opacity -->
                 <CssParameter name="fill">{{ colors.3 }}</CssParameter>
                 <CssParameter name="fill-opacity">1.0</CssParameter>
-             </Fill>     
+             </Fill>
+             <Stroke>
+                <CssParameter name="stroke">#FAFAFA</CssParameter>
+                <CssParameter name="stroke-width">0.5</CssParameter>
+             </Stroke>      
           </PolygonSymbolizer>
         </Rule>
         <Rule>
           <Title>19-0</Title>
           <ogc:Filter>
             <ogc:PropertyIsBetween>
-              <ogc:PropertyName>completion</ogc:PropertyName>
+              <ogc:PropertyName>{{ category }}</ogc:PropertyName>
               <ogc:LowerBoundary>
                 <ogc:Literal>0</ogc:Literal>
               </ogc:LowerBoundary>
@@ -111,7 +127,30 @@
                 <!-- CssParameters allowed are fill (the color) and fill-opacity -->
                 <CssParameter name="fill">{{ colors.4 }}</CssParameter>
                 <CssParameter name="fill-opacity">1.0</CssParameter>
-             </Fill>     
+             </Fill>
+             <Stroke>
+                <CssParameter name="stroke">#FAFAFA</CssParameter>
+                <CssParameter name="stroke-width">0.5</CssParameter>
+             </Stroke>      
+          </PolygonSymbolizer>
+        </Rule>
+        <Rule>
+          <Title>19-0</Title>
+          <ogc:Filter>
+            <ogc:PropertyIsNull>
+              <ogc:PropertyName>{{ category }}</ogc:PropertyName>             
+            </ogc:PropertyIsNull>
+          </ogc:Filter>
+          <PolygonSymbolizer>
+             <Fill>
+                <!-- CssParameters allowed are fill (the color) and fill-opacity -->
+                <CssParameter name="fill">#BFBFBF</CssParameter>
+                <CssParameter name="fill-opacity">1.0</CssParameter>
+             </Fill>
+             <Stroke>
+                <CssParameter name="stroke">#FAFAFA</CssParameter>
+                <CssParameter name="stroke-width">0.5</CssParameter>
+             </Stroke>     
           </PolygonSymbolizer>
         </Rule>
       </FeatureTypeStyle>

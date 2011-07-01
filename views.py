@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotAllowed, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, STATUS
+from completion import update_completion
 from colorsys import hsv_to_rgb
 
 VALID_CONTEXTS = ['full', 'popup']
@@ -111,4 +112,22 @@ def category_sld(request, category):
         hex_color_ramp.append( rgb_to_hex( int(round(255*rgb_color[0])), int(round(255*rgb_color[1])), int(round(255*rgb_color[2])) ) )
         
     return render_to_response('aasgtrack/category-style.sld', standard_context({ 'category': category, 'colors': hex_color_ramp }), mimetype="application/xml")
+
+def update_state_completion(request, state):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META['REQUEST_METHOD'] not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
+    
+    # Requested state abbreviation must be valid
+    if state != None:
+        state = get_object_or_404(State, abbreviation__iexact=state)
+    
+    # Run the update routine
+    update_completion(state)
+    
+    # If it didn't gag, you're done
+    return HttpResponse("<p>Successfully Updated</p>")
+    
+    
     

@@ -13,9 +13,24 @@
 		<script src="{{ media_url }}aasgtrack/GeoExt/lib/GeoExt.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var globalMap;
+			var g_continentalLayer;
+			var g_alaskaLayer;
+			var g_hawaiiLayer;
 			
 			function mapEvent(event) {
 				alert(globalMap.getExtent())
+			}
+			
+			function changeStyle(category) { 
+				// Set the styles argument in the WMS requests
+				g_continentalLayer.params["STYLES"] = category;
+				g_alaskaLayer.params["STYLES"] = category;
+				g_hawaiiLayer.params["STYLES"] = category;
+				
+				// Redraw the map
+				g_continentalLayer.redraw();
+				g_alaskaLayer.redraw();
+				g_hawaiiLayer.redraw();
 			}	
 					
 		    Ext.onReady(function() {
@@ -57,21 +72,21 @@
 		            "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
 		            { layers: ["0", "1"], 
 		              format: "image/png" }
-		        );
+		        );		       
 		        
 		        var alaskaLayer = new OpenLayers.Layer.WMS(
 		            "Continents: Alaska",
 		            "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
 		            { layers: ["0", "1"], 
 		              format: "image/png" }
-		        );
+		        );		        
 		        
 		        var hawaiiLayer = new OpenLayers.Layer.WMS(
 		            "Continents: Hawaii",
 		            "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
 		            { layers: ["0", "1"], 
 		              format: "image/png" }
-		        );
+		        );		        
 		        
 		        // Create State foreground layers
 		        var continentalStateLayer = new OpenLayers.Layer.WMS(
@@ -80,6 +95,7 @@
 		        	{ layers: ["aasg:StateContributionTracker"],
 		        	  transparent: "true" }
 		        );
+		        g_continentalLayer = continentalStateLayer;
 		        
 		        var alaskaStateLayer = new OpenLayers.Layer.WMS(
 		        	"States: Contiguous",
@@ -87,6 +103,7 @@
 		        	{ layers: ["aasg:StateContributionTracker"],
 		        	  transparent: "true" }
 		        );
+		        g_alaskaLayer = alaskaStateLayer;
 		        
 		        var hawaiiStateLayer = new OpenLayers.Layer.WMS(
 		        	"States: Contiguous",
@@ -94,6 +111,7 @@
 		        	{ layers: ["aasg:StateContributionTracker"],
 		        	  transparent: "true" }
 		        );
+		        g_hawaiiLayer = hawaiiStateLayer;
 		        
 		        // Add the foreground layer to each map
 				continentalMap.addLayer(continentalStateLayer);
@@ -111,7 +129,7 @@
 				var hawaiiCenterPoint = new OpenLayers.LonLat(-17532836, 2356488);
 				
 				// Build GeoExt.MapPanels
-				var marginValue = 5;
+				var marginValue = 10;
 				var alaskaHeight = 200;
 				var hawaiiHeight = 125;
 				
@@ -148,7 +166,7 @@
 		        // Category HTML
 		        var catHtml = ''
 		        {% for cat in category_codes %}
-		        	catHtml += "<p><a href='/track/{{ cat }}/sld'>{{ category_codes|get:cat }}</a></p>"
+		        	catHtml += "<p><a href='#' onClick='changeStyle(\"{{ cat }}\")'>{{ category_codes|get:cat }}</a></p>"
 		        {% endfor %}
 		        
 				// Build the Page Layout				
