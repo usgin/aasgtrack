@@ -1,9 +1,11 @@
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, STATUS
 from completion import update_completion
 from colorsys import hsv_to_rgb
+import urllib2
 
 VALID_CONTEXTS = ['full', 'popup']
     
@@ -69,7 +71,8 @@ def progress_map(request):
     if request.META['REQUEST_METHOD'] not in valid_requests:
         return HttpResponseNotAllowed(valid_requests)
     
-    return render_to_response('aasgtrack/map-base.html', standard_context({}))
+    return render_to_response('aasgtrack/tracking-map.html', standard_context({}))
+    #return render_to_response('aasgtrack/dummy-map.html', standard_context({}))
 
 def rgb_to_hex(r,g,b):
     hexchars = "0123456789ABCDEF"
@@ -136,6 +139,77 @@ def map_scripts(request, js_file_name):
         return HttpResponseNotAllowed(valid_requests)
     
     return render_to_response("aasgtrack/" + js_file_name, standard_context({}), mimetype="text/javascript")
+
+def proxy_response_cors_headers(response, methods, headers, hosts=None):
+    # Give a response CORS headers
+    if hosts == None:
+        response['Access-Control-Allow-Origin'] = '*'
+    else:
+        response['Access-Control-Allow-Origin'] = ','.join(hosts)
+    response['Access-Control-Allow-Methods'] = ','.join(methods)
+    response['Access-Control-Allow-Headers'] = ','.join(headers)
+    
+    return response
+
+@csrf_exempt
+def service_proxy(request):    
+    # To get around XMLHTTPRequest cross-domain issues. Commonly used as OpenLayers.ProxyHost
+    
+    # These are the only domains that can be requested through this proxy
+    allowedHosts = ['localhost', 'localhost:8080', 'localhost:8000',
+                    'services.usgin.org', 'services.usgin.org:8080',
+                    '50.19.88.63', '50.19.88.63:8080']
+    
+    # These are the only allowed request methods
+    allowedRequests = ['POST', 'GET', 'OPTIONS']
+    
+    # These are the allowed CORS headers
+    allowedHeaders = ['content-type', 'x-requested-with']
+    
+    # Check that the request Method is valid
+    method = request.META['REQUEST_METHOD']
+    if method in ["POST", "GET"]:
+        # Find the URL that is being requested through this proxy
+        url = request.GET.get('url', "http://www.openlayers.org")
+    elif method in ["OPTIONS"]:
+        # If it is an OPTIONS request, just respond appropriately
+        response = HttpResponse("OK", status=200, mimetype="text/plain")
+        return proxy_response_cors_headers(response, allowedRequests, allowedHeaders)
+    else:
+        return HttpResponseNotAllowed(allowedRequests)
+    
+    try:
+        # Make sure the requested Host is allowed
+        host = url.split("/")[2]
+        if allowedHosts and not host in allowedHosts:
+            return HttpResponse("502: Bad Gateway. Cannot provide " + url, status=502)
+        
+        elif url.startswith("http://") or url.startswith("https://"):            
+            if method == "POST":
+                headers = {'CONTENT-LENGTH': request.META['CONTENT_LENGTH'],
+                           'CONTENT-TYPE': request.META['CONTENT_TYPE']}
+                body = request.raw_post_data
+                r = urllib2.Request(url, body, headers)
+                y = urllib2.urlopen(r)
+            else:
+                y = urllib2.urlopen(url)
+            
+            # print content type header
+            response = HttpResponse(y.read())
+            i = y.info()
+            if i.has_key("Content-Type"):
+                response['Content-Type'] = i["Content-Type"]
+            else:
+                response['Content-Type'] = "text/plain"
+            
+            y.close()
+            
+            return proxy_response_cors_headers(response, allowedRequests, allowedHeaders)
+        else:
+            return HttpResponse("Illegal request.")
+    
+    except Exception, E:
+        return HttpResponse("Some unexpected error occurred. Error text was:" + E, status=500)
     
     
     
