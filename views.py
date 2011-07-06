@@ -128,6 +128,14 @@ def update_state_completion(request, state):
     
     # If it didn't gag, you're done
     return HttpResponse("<p>Successfully Updated</p>")
+
+def map_scripts(request, js_file_name):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META['REQUEST_METHOD'] not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
+    
+    return render_to_response("aasgtrack/" + js_file_name, standard_context({}), mimetype="text/javascript")
     
     
     
