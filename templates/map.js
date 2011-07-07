@@ -1,17 +1,7 @@
 {% load filters %}
 var g_stateLayers = {};
-
-function mapEvent(event) {
-	alert(globalMap.getExtent())
-}
-
-function changeWmsStyle(category) { 
-	// Set the styles argument in the WMS requests
-	for (layer in g_stateLayers) {
-		g_stateLayers[layer].params["STYLES"] = category;
-		g_stateLayers[layer].redraw();
-	}
-}
+var g_pointLayers = {};
+var g_maps = {};
 
 function changeWfsStyle(category) {
 	for (layer in g_stateLayers) {
@@ -24,23 +14,32 @@ Ext.onReady(function() {
 	OpenLayers.ProxyHost = 'proxy?url=';
 	
 	// Build all the OpenLayers.Maps -- function defined in map-builder.js
-	var maps = buildMaps();
+	g_maps = buildMaps();
 	
 	// Add Layers to the maps -- function defined in map-builder.js
-	addLayers(maps);
+	addLayers(g_maps);
 	
 	// Set global layers for re-styling later
-	for (mapName in maps) {
-		for (layerIndex in maps[mapName].layers) {
-			var layer = maps[mapName].layers[layerIndex];
+	for (mapName in g_maps) {
+		for (layerIndex in g_maps[mapName].layers) {
+			var layer = g_maps[mapName].layers[layerIndex];
 			if (layer.name == mapName + "StateLayer") {
 				g_stateLayers[mapName] = layer;
 			}
+			else if (layer.name == mapName + "PointLayer") {
+				g_pointLayers[mapName] = layer;
+			}
 		}
-	}	
+	}
+	
+	// Add the function for handling point-click events -- function defined in map-builder.js
+	addClickEvent(g_maps);
+	
+	// Add the function for highlighting points as you hover on them
+	addHoverEvent(g_maps);
 	
 	// Build GeoExt.MapPanels -- function defined in map-builder.js
-	mapPanels = buildMapPanels(maps);		 
+	mapPanels = buildMapPanels(g_maps);		 
     
     // Category HTML
     var catHtml = ''

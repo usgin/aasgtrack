@@ -1,6 +1,6 @@
 function buildMapOptions(desiredResolution) {
 	var mapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
-	   controls: new OpenLayers.Control.Attribution(),
+	   controls: [ new OpenLayers.Control.Attribution() ],
 	   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	   maxResolution: 156543.0339,
 	   resolutions: [ desiredResolution ],
@@ -30,8 +30,42 @@ function addLayers(maps) {
 		//thisMap.addLayer(wmsStateLayer(index + "StateLayer"));
 		thisMap.addLayer(wmsLeaderLayer());
 		thisMap.addLayer(wfsPointLayer(index + "PointLayer"));
+		thisMap.addLayer(wfsCenterPointLayer(index + "CenterLayer"));
 		thisMap.addLayer(wmsPointLayer(index + "LabelLayer"));
 	}
+}
+
+function addClickEvent(maps) {
+	for (index in maps) {
+		var thisMap = maps[index];
+		
+		// Add the click event -- function defined in map-click.js
+		var clickControl = buildClickControl();
+		thisMap.addControl(clickControl);
+		clickControl.activate();
+	}
+}
+
+function addHoverEvent(maps) {
+	for (index in maps) {
+		var thisMap = maps[index];
+		var theLayer;
+		
+		// Find the point layer
+		for (alayerIndex in thisMap.layers) {
+			thisLayer = thisMap.layers[alayerIndex];
+			if (thisLayer.name == index + "PointLayer") {
+				theLayer = thisLayer;
+			}
+		}
+		
+		var hoverControl = buildHoverControl(theLayer);
+		var clickerControl = buildSelectClicker(theLayer);
+		thisMap.addControl(hoverControl);
+		thisMap.addControl(clickerControl);
+		hoverControl.activate();
+		clickerControl.activate();
+	}	
 }
 
 function buildMapPanels(maps) {

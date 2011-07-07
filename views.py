@@ -20,16 +20,36 @@ root_colors = {
    'rchem': float(315) / 360
 }
 
-root_hex_colors = {
-   'temp': '#FF0000', 
-   'wchem': '#FFBF00',
-   'tect': '#7FFF00',
-   'other': '#00FF3F',
-   'meta': '#00FFFF',
-   'map': '#003FFF',
-   'lith': '#7F00FF',
-   'rchem': '#FF00BF'
-}
+def rgb_to_hex(r,g,b):
+    hexchars = "0123456789ABCDEF"
+    return "#" + hexchars[r / 16] + hexchars[r % 16] + hexchars[g / 16] + hexchars[g % 16] + hexchars[b / 16] + hexchars[b % 16]
+
+def category_color_ramp(category):
+    # Build HSV color ramp
+    hsv_color_ramp = []
+    for index in [0, 1, 2, 3, 4]:
+        hsv_color_ramp.append( ( root_colors[category], 1 - .18 * index, 1 ) )
+    
+    # Convert to RGB color ramp
+    rgb_color_ramp = []
+    for index in [0, 1, 2, 3, 4]:
+        hsv_color = hsv_color_ramp[index]
+        rgb_color_ramp.append( hsv_to_rgb( hsv_color[0], hsv_color[1], hsv_color[2] ) )
+    
+    # Convert to HEX color ramp
+    hex_color_ramp = []
+    for index in [0, 1, 2, 3, 4]:
+        rgb_color = rgb_color_ramp[index]
+        hex_color_ramp.append( rgb_to_hex( int(round(255*rgb_color[0])), int(round(255*rgb_color[1])), int(round(255*rgb_color[2])) ) )
+    
+    # Return the color ramp
+    return hex_color_ramp
+
+hex_color_ramps = {}
+root_hex_colors = {}
+for category in CATEGORIES:
+    hex_color_ramps[category] = category_color_ramp(category)
+    root_hex_colors[category] = hex_color_ramps[category][0]
     
 def standard_context(additionals):
     context = {'media_url': settings.MEDIA_URL,
@@ -94,31 +114,6 @@ def progress_map(request):
         return HttpResponseNotAllowed(valid_requests)
     
     return render_to_response('aasgtrack/tracking-map.html', standard_context({}))
-
-def rgb_to_hex(r,g,b):
-    hexchars = "0123456789ABCDEF"
-    return "#" + hexchars[r / 16] + hexchars[r % 16] + hexchars[g / 16] + hexchars[g % 16] + hexchars[b / 16] + hexchars[b % 16]
-
-def category_color_ramp(category):
-    # Build HSV color ramp
-    hsv_color_ramp = []
-    for index in [0, 1, 2, 3, 4]:
-        hsv_color_ramp.append( ( root_colors[category], 1 - .18 * index, 1 ) )
-    
-    # Convert to RGB color ramp
-    rgb_color_ramp = []
-    for index in [0, 1, 2, 3, 4]:
-        hsv_color = hsv_color_ramp[index]
-        rgb_color_ramp.append( hsv_to_rgb( hsv_color[0], hsv_color[1], hsv_color[2] ) )
-    
-    # Convert to HEX color ramp
-    hex_color_ramp = []
-    for index in [0, 1, 2, 3, 4]:
-        rgb_color = rgb_color_ramp[index]
-        hex_color_ramp.append( rgb_to_hex( int(round(255*rgb_color[0])), int(round(255*rgb_color[1])), int(round(255*rgb_color[2])) ) )
-    
-    # Return the color ramp
-    return hex_color_ramp
     
 def category_sld(request, category):
     # Only GET commands are allowed
@@ -152,7 +147,8 @@ def update_state_completion(request, state):
 
 def build_color_scheme(category):
     scheme = {}
-    ramp = category_color_ramp(category)
+    #ramp = category_color_ramp(category)
+    ramp = hex_color_ramps[category]
     
     # Loop through States
     for a_state in State.objects.all():

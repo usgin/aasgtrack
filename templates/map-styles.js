@@ -29,18 +29,23 @@ function buildStateStyleMap(category) {
 
 function buildPointStyleMap() {
 	// Create the StyleMap with the only default value: line color
-	var theStyleMap = new OpenLayers.StyleMap({
+	var defaultStyle = new OpenLayers.Style({
 		strokeWidth: 1,
 		strokeColor: "#000000",
-		fillColor: "#AAAAAA",
+		fillColor: "#999999",
 		pointRadius: 4,
 	});
 	
-	// Create the additional rules that are not contingent on database	
-	var labelLookup = {
-			"all": { pointRadius: 9, fillColor: "#FFFFFF" }
-	}
-	//theStyleMap.addUniqueValueRules("default", "category", labelLookup)
+	var selectStyle = new OpenLayers.Style({
+		strokeWidth: 4,
+		strokeColor: "#FFFF00",
+		pointRadius: 5,
+	});
+	
+	var theStyleMap = new OpenLayers.StyleMap({
+		"default": defaultStyle,
+		"select": selectStyle,
+	});
 	
 	// Create rules that are database contingent, based on the g_stateThemes above
 	{% for cat in category_codes %}
@@ -50,6 +55,9 @@ function buildPointStyleMap() {
 			var thisSymbolizer = {};
 			if (g_stateThemes["{{ cat }}"][state]["fillColor"] != "#BFBFBF") {
 				thisSymbolizer["fillColor"] = "{{ root_colors|get:cat }}";
+			}
+			else {
+				thisSymbolizer["strokeWidth"] = 0;
 			}
 			
 			// Build the rule that is actually two filter criteria combined by AND
@@ -101,15 +109,27 @@ function buildPointStyleMap() {
 	{% endfor %}
 	
 	// Add Rules for the label points
-	var thisRule = new OpenLayers.Rule({
-		filter: new OpenLayers.Filter.Comparison({
-			type: OpenLayers.Filter.Comparison.EQUAL_TO,
-			property: "category",
-			value: "all"
-		}),
-		symbolizer: { pointRadius: 9, fillColor: "#FFFFFF" }
-	});
-	theStyleMap.styles.default.addRules([ thisRule ]);
+	//var thisRule = new OpenLayers.Rule({
+	//	filter: new OpenLayers.Filter.Comparison({
+	//		type: OpenLayers.Filter.Comparison.EQUAL_TO,
+	//		property: "category",
+	//		value: "all"
+	//	}),
+	//	symbolizer: { pointRadius: 9, fillColor: "#FFFFFF" }
+	//});
+	//theStyleMap.styles.default.addRules([ thisRule ]);
 		
 	return theStyleMap;	
+}
+
+function buildCenterPointStyleMap() {
+	var defaultStyle = new OpenLayers.Style({
+		strokeWidth: 1,
+		strokeColor: "#000000",
+		fillColor: "#FFFFFF",
+		pointRadius: 9,
+	});
+	
+	var theStyleMap = new OpenLayers.StyleMap(defaultStyle);
+	return theStyleMap;
 }

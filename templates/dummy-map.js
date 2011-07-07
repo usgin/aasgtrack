@@ -9,21 +9,23 @@ Ext.onReady(function() {
           format: "image/png" }
     );
 	
+	var wfsProtocol = new OpenLayers.Protocol.WFS({
+		  //url: "http://50.19.88.63/ArcGIS/services/StatePoints/MapServer/WFSServer",
+		  //featureType: "State_Points",
+		  srsName: "urn:ogc:def:crs:EPSG:6.9:3857",
+		  url: "http://localhost:8080/geoserver/wfs",
+		  //featureType: "StatePoints",
+		  featureType: "States",
+		  featureNS: "http://stategeothermaldata.org/uri-gin/aasg/xmlschema/simplefeatures/",
+		  geometryName: "shape"
+		  
+	  });
+	
 	// Point Layer (WFS)
 	var pointLayer = new OpenLayers.Layer.Vector(
 		"StatePoints",
 		{ strategies: [ new OpenLayers.Strategy.BBOX() ],
-		  protocol: new OpenLayers.Protocol.WFS({
-			  //url: "http://50.19.88.63/ArcGIS/services/StatePoints/MapServer/WFSServer",
-			  //featureType: "State_Points",
-			  srsName: "urn:ogc:def:crs:EPSG:6.9:3857",
-			  url: "http://localhost:8080/geoserver/wfs",
-			  featureType: "StatePoints",
-			  //featureType: "StateContributionTracker",
-			  featureNS: "http://stategeothermaldata.org/uri-gin/aasg/xmlschema/simplefeatures/",
-			  geometryName: "shape"
-			  
-		  }),
+		  protocol: wfsProtocol,
 		  styleMap: new OpenLayers.StyleMap({
 			  strokeWidth: 3,
 			  strokeColor: "#333333",
@@ -38,6 +40,7 @@ Ext.onReady(function() {
 		"theMap",
 		{
 			projection: new OpenLayers.Projection("EPSG:3857"),
+			controls: [ new OpenLayers.Control.Attribution() ],
 			maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	   		maxResolution: 156543.0339,
 	   		units: "m"
@@ -48,11 +51,24 @@ Ext.onReady(function() {
 	theMap.addLayer(continentalLayer);
 	theMap.addLayer(pointLayer);
 	
+	// Add a clicker
+	var theClicker = new OpenLayers.Control.GetFeature({
+		protocol: wfsProtocol
+	});
+	
+	theClicker.events.register("featureselected", this, function(e) {
+		alert("Clicker was clicked.")
+	});
+	
+	theMap.addControl(theClicker);
+	theClicker.activate();
+	
 	// Build the Map Panel
 	var theMapPanel = new GeoExt.MapPanel({
 		map: theMap,
 		title: "Dummy Map",
-		region: "center"
+		region: "center",
+		center: new OpenLayers.LonLat(-10691131, 4705637)
 	});
 	
 	// Layout the Page
