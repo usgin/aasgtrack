@@ -8,6 +8,28 @@ from colorsys import hsv_to_rgb
 import urllib2
 
 VALID_CONTEXTS = ['full', 'popup']
+
+root_colors = {
+   'temp': 0, 
+   'wchem': float(45) / 360,
+   'tect': float(90) / 360,
+   'other': float(135) / 360,
+   'meta': float(180) / 360,
+   'map': float(225) / 360,
+   'lith': float(270) / 360,
+   'rchem': float(315) / 360
+}
+
+root_hex_colors = {
+   'temp': '#FF0000', 
+   'wchem': '#FFBF00',
+   'tect': '#7FFF00',
+   'other': '#00FF3F',
+   'meta': '#00FFFF',
+   'map': '#003FFF',
+   'lith': '#7F00FF',
+   'rchem': '#FF00BF'
+}
     
 def standard_context(additionals):
     context = {'media_url': settings.MEDIA_URL,
@@ -72,31 +94,12 @@ def progress_map(request):
         return HttpResponseNotAllowed(valid_requests)
     
     return render_to_response('aasgtrack/tracking-map.html', standard_context({}))
-    #return render_to_response('aasgtrack/dummy-map.html', standard_context({}))
 
 def rgb_to_hex(r,g,b):
     hexchars = "0123456789ABCDEF"
     return "#" + hexchars[r / 16] + hexchars[r % 16] + hexchars[g / 16] + hexchars[g % 16] + hexchars[b / 16] + hexchars[b % 16]
 
-def category_sld(request, category):
-    # Only GET commands are allowed
-    valid_requests = ['GET']
-    if request.META['REQUEST_METHOD'] not in valid_requests:
-        return HttpResponseNotAllowed(valid_requests)
-    
-    # Make sure the category requested is correct
-    if category not in CATEGORIES: raise Http404
-    
-    # All we need is a dictionary: lookup category, get list of HEX colors
-    root_colors = {'temp': 0, 
-                   'wchem': float(45) / 360,
-                   'tect': float(90) / 360,
-                   'other': float(135) / 360,
-                   'meta': float(180) / 360,
-                   'map': float(225) / 360,
-                   'lith': float(270) / 360,
-                   'rchem': float(315) / 360}
-    
+def category_color_ramp(category):
     # Build HSV color ramp
     hsv_color_ramp = []
     for index in [0, 1, 2, 3, 4]:
@@ -113,6 +116,21 @@ def category_sld(request, category):
     for index in [0, 1, 2, 3, 4]:
         rgb_color = rgb_color_ramp[index]
         hex_color_ramp.append( rgb_to_hex( int(round(255*rgb_color[0])), int(round(255*rgb_color[1])), int(round(255*rgb_color[2])) ) )
+    
+    # Return the color ramp
+    return hex_color_ramp
+    
+def category_sld(request, category):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META['REQUEST_METHOD'] not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
+    
+    # Make sure the category requested is correct
+    if category not in CATEGORIES: raise Http404
+    
+    # All we need is a dictionary: lookup category, get list of HEX colors    
+    hex_color_ramp = category_color_ramp(category)
         
     return render_to_response('aasgtrack/category-style.sld', standard_context({ 'category': category, 'colors': hex_color_ramp }), mimetype="application/xml")
 
@@ -132,13 +150,50 @@ def update_state_completion(request, state):
     # If it didn't gag, you're done
     return HttpResponse("<p>Successfully Updated</p>")
 
+def build_color_scheme(category):
+    scheme = {}
+    ramp = category_color_ramp(category)
+    
+    # Loop through States
+    for a_state in State.objects.all():
+        # Get the state's completion percentage in this category
+        complete = a_state.category_completion(category)
+        
+        # Determine which symbology bin it belongs in
+        if 0 <= complete < 20:
+            scheme[a_state.abbreviation] = ramp[4]
+        elif 20 <= complete < 40:
+            scheme[a_state.abbreviation] = ramp[3]
+        elif 40 <= complete < 60:
+            scheme[a_state.abbreviation] = ramp[2]
+        elif 60 <= complete < 80:
+            scheme[a_state.abbreviation] = ramp[1]
+        elif 80 <= complete < 100:
+            scheme[a_state.abbreviation] = ramp[0]
+        else:
+            scheme[a_state.abbreviation] = '#BFBFBF'
+    
+    # Return the result
+    return scheme
+    
+
 def map_scripts(request, js_file_name):
     # Only GET commands are allowed
     valid_requests = ['GET']
     if request.META['REQUEST_METHOD'] not in valid_requests:
         return HttpResponseNotAllowed(valid_requests)
     
-    return render_to_response("aasgtrack/" + js_file_name, standard_context({}), mimetype="text/javascript")
+    additional_context = {}
+    if js_file_name == 'map-styles.js':
+        # Need to give scripts symbology context
+        #  These context variables are dictionaries. Each one is named like a category, key is state abbreviation, value is hex color
+        for cat in CATEGORIES:
+            additional_context[cat] = build_color_scheme(cat)
+        
+        # Add another context variable for the roor colors
+        additional_context['root_colors'] = root_hex_colors
+        
+    return render_to_response("aasgtrack/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
 
 def proxy_response_cors_headers(response, methods, headers, hosts=None):
     # Give a response CORS headers

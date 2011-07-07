@@ -12,12 +12,7 @@ function wfsPointLayer(name) {
 			  geometryName: "shape"
 			  
 		  }),
-		  styleMap: new OpenLayers.StyleMap({
-			  strokeWidth: 1,
-			  strokeColor: "#333333",
-			  fillColor: "#AAAAAA",
-			  pointRadius: 10,
-		  })
+		  styleMap: buildPointStyleMap()
 		}
 	);
 	

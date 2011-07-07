@@ -26,10 +26,22 @@ function wmsPointLayer(name) {
 	var pointLayer = new OpenLayers.Layer.WMS(
     	name,
     	"http://50.19.88.63/arcgis/services/StatePoints/MapServer/WMSServer",
-    	{ layers: ["0", "1", "2", "3", "4", "5"],
+    	{ layers: ["2", "3", "5"],
     	  transparent: "true" },
     	{ isBackground: false }
     );
 	
 	return pointLayer;
+}
+
+function wmsLeaderLayer() {
+	var leaderLayer = new OpenLayers.Layer.WMS(
+    	"Leaders",
+    	"http://50.19.88.63/arcgis/services/StatePoints/MapServer/WMSServer",
+    	{ layers: ["0"],
+    	  transparent: "true" },
+    	{ isBackground: false }
+    );
+	
+	return leaderLayer;
 }

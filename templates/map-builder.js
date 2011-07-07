@@ -23,14 +23,14 @@ function buildMaps() {
 function addLayers(maps) {
 	for (index in maps) {
 		thisMap = maps[index];
-		mapName = thisMap.name;
 		
 		// Layer-building functions defined in wfs-layers.js and wms-layers.js
-		thisMap.addLayer(wmsBackgroundLayer(mapName + "BackgroundLayer"));
-		thisMap.addLayer(wfsStateLayer(mapName + "StateLayer"));
-		//thisMap.addLayer(wmsStateLayer(mapName + "StateLayer"));
-		thisMap.addLayer(wfsPointLayer(mapName + "PointLayer"));
-		//thisMap.addLayer(wmsPointLayer(mapName + "PointLayer"));
+		thisMap.addLayer(wmsBackgroundLayer(index + "BackgroundLayer"));
+		thisMap.addLayer(wfsStateLayer(index + "StateLayer"));
+		//thisMap.addLayer(wmsStateLayer(index + "StateLayer"));
+		thisMap.addLayer(wmsLeaderLayer());
+		thisMap.addLayer(wfsPointLayer(index + "PointLayer"));
+		thisMap.addLayer(wmsPointLayer(index + "LabelLayer"));
 	}
 }
 

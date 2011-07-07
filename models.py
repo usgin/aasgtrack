@@ -56,6 +56,9 @@ class State(models.Model):
     
     def submissions_in_review(self):
         return len(self.deliverable_set.filter(submission__status='submitted')) + len(self.deliverable_set.filter(submission__status='review'))
+    
+    def category_completion(self, category):
+        return completion_calc(self, category)
         
     def temp_completion(self):
         return completion_calc(self, 'temp')
