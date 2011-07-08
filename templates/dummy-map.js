@@ -4,71 +4,43 @@ Ext.onReady(function() {
 	// Base Layer (WMS)
 	var continentalLayer = new OpenLayers.Layer.WMS(
         "Continents: Contiguous",
-        "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
+        "http://50.19.88.63/ArcGIS/services/GeologicMapOfArizona/MapServer/WMSServer",
         { layers: ["0", "1", "2"], 
-          format: "image/png" }
+          format: "image/png",
+          transparent: "true",
+        },
+      	{ 
+        	isBackground: false,
+      	}
     );
 	
-	var wfsProtocol = new OpenLayers.Protocol.WFS({
-		  //url: "http://50.19.88.63/ArcGIS/services/StatePoints/MapServer/WFSServer",
-		  //featureType: "State_Points",
-		  srsName: "urn:ogc:def:crs:EPSG:6.9:3857",
-		  url: "http://localhost:8080/geoserver/wfs",
-		  //featureType: "StatePoints",
-		  featureType: "States",
-		  featureNS: "http://stategeothermaldata.org/uri-gin/aasg/xmlschema/simplefeatures/",
-		  geometryName: "shape"
-		  
-	  });
-	
-	// Point Layer (WFS)
-	var pointLayer = new OpenLayers.Layer.Vector(
-		"StatePoints",
-		{ strategies: [ new OpenLayers.Strategy.BBOX() ],
-		  protocol: wfsProtocol,
-		  styleMap: new OpenLayers.StyleMap({
-			  strokeWidth: 3,
-			  strokeColor: "#333333",
-			  fillColor: "#AAAAAA",
-			  pointRadius: 10,
-		  })
+	gSatLayer = new OpenLayers.Layer.Google("Google", {"sphericalMercator": true,projection: new OpenLayers.Projection("EPSG:3857")});
+	continentalLayer.setOpacity(.50);
+
+	mapOptions = {
+		    maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+		    numZoomLevels:18,
+		    maxResolution:156543.0339,
+		    units:'m',
+		    projection: new OpenLayers.Projection("EPSG:3857"),
 		}
-	);
 	
 	// Build the Map
 	var theMap = new OpenLayers.Map(
 		"theMap",
-		{
-			projection: new OpenLayers.Projection("EPSG:3857"),
-			controls: [ new OpenLayers.Control.Attribution() ],
-			maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
-	   		maxResolution: 156543.0339,
-	   		units: "m"
-		}
+		mapOptions
 	);
 	
-	// Add layers to the map
 	theMap.addLayer(continentalLayer);
-	theMap.addLayer(pointLayer);
+	theMap.addLayer(gSatLayer);
 	
-	// Add a clicker
-	var theClicker = new OpenLayers.Control.GetFeature({
-		protocol: wfsProtocol
-	});
-	
-	theClicker.events.register("featureselected", this, function(e) {
-		alert("Clicker was clicked.")
-	});
-	
-	theMap.addControl(theClicker);
-	theClicker.activate();
-	
-	// Build the Map Panel
+	// Build the Map Panel	
 	var theMapPanel = new GeoExt.MapPanel({
 		map: theMap,
 		title: "Dummy Map",
 		region: "center",
-		center: new OpenLayers.LonLat(-10691131, 4705637)
+		center: new OpenLayers.LonLat(-10691131, 4705637),
+		zoom: 7
 	});
 	
 	// Layout the Page
