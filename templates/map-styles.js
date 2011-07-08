@@ -42,9 +42,16 @@ function buildPointStyleMap() {
 		pointRadius: 5,
 	});
 	
+	var tempStyle = new OpenLayers.Style({
+		strokeWidth: 4,
+		strokeColor: "#37FDFC",
+		pointRadius: 5,
+	})
+	
 	var theStyleMap = new OpenLayers.StyleMap({
 		"default": defaultStyle,
 		"select": selectStyle,
+		"temporary": tempStyle
 	});
 	
 	// Create rules that are database contingent, based on the g_stateThemes above

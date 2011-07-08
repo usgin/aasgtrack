@@ -1,40 +1,57 @@
 {% load filters %}
 var categories = {};{% for cat in category_codes %}categories["{{ cat }}"] = "{{ category_codes|get:cat }}";{% endfor %}
+var popup;
 
 function buildPopup(state, category, feature, map) {
-	var title = state + ": ";
+	url = "/track/" + state + "/popup/" + category;
 	if (category == "all") {
-		title += "All Themes"
-	}
-	else {
-		title += categories[category];
+		url = "/track/" + state + "/popup/"
 	}
 	
-	var popup;
-	if (map == null) {
-		popup = new GeoExt.Popup({
-			title: title,
-			location: feature,
-			width: 200,
-			html: "Hibbity Hee, Hibbity Haw",
-			maximizable: false,
-			collapsible: false				
-		});
-	}
-	else {
-		popup = new GeoExt.Popup({
-			title: title,
-			location: feature,
-			width: 200,
-			html: "Hibbity Hee, Hibbity Haw",
-			map: map,
-			maximizable: false,
-			collapsible: false				
-		});
+	if (popup != null) {
+		popup.close();
 	}
 	
-	// Show the popup
-	popup.show();
+	Ext.Ajax.request({
+		url: url,
+		method: "GET",
+		success: function(result, request) {
+			var title = state + ": ";
+			if (category == "all") {
+				title += "All Themes"
+			}
+			else {
+				title += categories[category];
+			}
+			
+			var popupParameters = {
+				title: title,
+				location: feature,
+				width: 250,
+				html: result.responseText,
+				maximizable: false,
+				collapsible: false,
+				panIn: false,
+				anchored: false,	
+			};
+			
+			if (map != null) 
+			{
+				popupParameters["map"] = map;
+			}
+			
+			popup = new GeoExt.Popup(popupParameters);
+			
+			// Show the popup
+			var unpin = popup.tools[0].handler;
+			popup.show();
+			unpin();
+			
+		},
+		failure: function() {
+			alert("Request failed.")
+		}
+	});
 }
 
 function clickResponse(feature, map) {
@@ -88,7 +105,10 @@ function buildSelectClicker(layer) {
 		{
 			hover: false,
 			onSelect: clickResponse,
-			renderIntent: "default"
+			//onUnselect: function(feature) {
+			//	popup.close();
+			//},
+			renderIntent: "temporary"
 		}
 	)
 	

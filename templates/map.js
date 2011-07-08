@@ -41,12 +41,6 @@ Ext.onReady(function() {
 	// Build GeoExt.MapPanels -- function defined in map-builder.js
 	mapPanels = buildMapPanels(g_maps);		 
     
-    // Category HTML
-    var catHtml = ''
-    {% for cat in category_codes %}
-    	catHtml += "<p><a href='#' onClick='changeWfsStyle(\"{{ cat }}\")'>{{ category_codes|get:cat }}</a></p>"
-    {% endfor %}
-    
 	// Build the Page Layout				
 	var vp = new Ext.Viewport({
         layout: "border",
@@ -55,12 +49,7 @@ Ext.onReady(function() {
         items: [ { layout: "absolute",
         		   region: "center",
         		   items: mapPanels
-        		},
-        		{ region: "east",
-        		  title: "Deliverable Categories",
-	        		  html: catHtml,
-	        		  width: 250,
-	        		}
-	        	   ]	
+        		}
+        	   ]
         });
 });

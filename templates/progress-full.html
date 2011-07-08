@@ -32,7 +32,7 @@
 	<div dojoType="dijit.layout.AccordionContainer" region="left" id="sidebar-accordion" style="height: 100%; overflow-y: scroll;">
 		{% for member in states %}
 			<div dojoType="dijit.layout.ContentPane" title="{{ member.name }}" id="{{ member.abbreviation|lower }}-sidebar">
-				<a href="/track/{{ member.abbreviation|lower }}" class="category-link">
+				<a href="/track/{{ member.abbreviation|lower }}/full" class="category-link">
 					{% if category %}
 						<div id="{{ member.abbreviation|lower}}-all" dojoType="dijit.layout.ContentPane" class="category-button">All Deliverables</div>
 					{% else %}
@@ -40,7 +40,7 @@
 					{% endif %}
 				</a>					
 				{% for cat in category_codes %}
-					<a href="/track/{{ member.abbreviation|lower }}/{{ cat }}/full" class="category-link">
+					<a href="/track/{{ member.abbreviation|lower }}/full/{{ cat }}" class="category-link">
 						{% if category_codes|get:cat == category %}
 							<div id="{{ member.abbreviation|lower }}-{{ cat }}" dojoType="dijit.layout.ContentPane" class="category-button category-active">{{ category_codes|get:cat }}</div>			
 						{% else %}

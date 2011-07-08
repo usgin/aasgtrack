@@ -26,9 +26,14 @@ for item in SUBMISSION_STATUS:
     STATUS[item[0]] = item[1]
     
 def completion_calc(state, category):
-    if category not in CATEGORIES: return None
+    categorized_deliverables = None;
+    if category in ['all']:
+        categorized_deliverables = state.deliverable_set.all()
+    elif category not in CATEGORIES: 
+        return None
+    else:
+        categorized_deliverables = state.deliverable_set.filter(category=category)
         
-    categorized_deliverables = state.deliverable_set.filter(category=category)
     deliverable_count = len(categorized_deliverables)
     if deliverable_count == 0: return None
     

@@ -62,7 +62,7 @@ def standard_context(additionals):
 
     return context
 
-def state_progress(request, state, category, context):
+def state_progress(request, state, context, category):
     # If no context is specified, "full" is the default
     if context is None: context = 'full'
     
@@ -89,11 +89,24 @@ def state_progress(request, state, category, context):
     # Get comments that pertain to these submissions
     comments = SubmissionComment.objects.filter(submission__in=submissions)
     
+    # Get the completion percentage for this category
+    if category == None:
+        if state.category_completion('all') == None:
+            percent = None
+        else:
+            percent = int(round(state.category_completion('all')))
+    else:
+        if state.category_completion(category) == None:
+            percent = None
+        else:
+            percent = int(round(state.category_completion(category)))
+        
     # Build context for the templates
     additional_context = {'comments': comments,
                           'submissions': submissions, 
                           'deliverables': deliverables,
-                          'state': state}
+                          'state': state,
+                          'percent': percent}
     if category != None: additional_context['category'] = CATEGORIES[category]
     template_context = standard_context(additional_context)
     
