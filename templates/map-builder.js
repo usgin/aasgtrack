@@ -78,16 +78,18 @@ function buildMapPanels(maps) {
 	var marginValue = 10;                     
 	var alaskaHeight = 200;
 	var hawaiiHeight = 125;
+	var mapWidth = 1024;
+	var titleWidth = 450;
 	
 	// Build the map panels
 	var continentalMapPanel = new GeoExt.MapPanel({	
         map: maps['continental'],
-        title: "State Geothermal Data Contribution Status",
         center: continentalCenterPoint,
         height: 768,
-        width: 1024,
+        width: mapWidth,
         x: 0,
         y: 0,
+        bodyStyle: { border: "1px solid black" },
     });
     
     var alaskaMapPanel = new GeoExt.MapPanel({
@@ -110,7 +112,26 @@ function buildMapPanels(maps) {
     	bodyStyle: { border: "1px solid black" },
     });
     
+    // Add a title Panel
+    currentTime = new Date();
+    month = currentTime.getMonth() + 1;
+    day = currentTime.getDate();
+    year = currentTime.getFullYear();
+    
+    today = month + "/" + day + "/" + year;
+    
+    titlePanel = new Ext.Panel({
+		width: titleWidth,
+		x: ( mapWidth - titleWidth ) / 2,
+		y: 15,
+		html: "<div style='text-align: center;'><h1 style='font-size: 21px;'>State Geothermal Data Contribution Status<br />by Data Theme</h1><p>" + today + "</p></div>",
+		bodyStyle: { 
+			border: "1px solid black",
+			padding: "15px"
+		}			
+	});
+    
     // Return a list of panels
-    var panelList = [ continentalMapPanel, alaskaMapPanel, hawaiiMapPanel ];
+    var panelList = [ continentalMapPanel, alaskaMapPanel, hawaiiMapPanel, titlePanel ];
 	return panelList;
 }

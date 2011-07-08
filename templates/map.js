@@ -39,8 +39,8 @@ Ext.onReady(function() {
 	addHoverEvent(g_maps);
 	
 	// Build GeoExt.MapPanels -- function defined in map-builder.js
-	mapPanels = buildMapPanels(g_maps);		 
-    
+	panels = buildMapPanels(g_maps);		     
+	
 	// Build the Page Layout				
 	var vp = new Ext.Viewport({
         layout: "border",
@@ -48,7 +48,7 @@ Ext.onReady(function() {
         defaults: { autoScroll: true },			    
         items: [ { layout: "absolute",
         		   region: "center",
-        		   items: mapPanels
+        		   items: panels
         		}
         	   ]
         });
