@@ -88,7 +88,7 @@ function buildPointStyleMap() {
 			});
 			
 			// Append the rule to the set
-			theStyleMap.styles.default.addRules([ thisRule ]);
+			theStyleMap.styles["default"].addRules([ thisRule ]);
 		}
 		
 		// Also add the appropriate rule for the legend point
@@ -112,7 +112,7 @@ function buildPointStyleMap() {
 		});
 		
 		// Append the rule to the set
-		theStyleMap.styles.default.addRules([ thisRule ]);
+		theStyleMap.styles["default"].addRules([ thisRule ]);
 	{% endfor %}
 	
 	// Add Rules for the label points
