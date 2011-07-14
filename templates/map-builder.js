@@ -1,6 +1,6 @@
 function buildMapOptions(desiredResolution) {
 	var mapOptions = { projection: new OpenLayers.Projection("EPSG:3857"),
-	   controls: [ new OpenLayers.Control.Attribution() ],
+	   controls: [ new OpenLayers.Control.Attribution(), ],
 	   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	   maxResolution: 156543.0339,
 	   resolutions: [ desiredResolution ],
