@@ -103,9 +103,10 @@ class Deliverable(models.Model):
         ordering = ['data_item']
         
     data_item = models.CharField(max_length=255)
-    number_of_items = models.IntegerField(verbose_name='Minimum No. of Items')
+    #number_of_items = models.IntegerField(verbose_name='Minimum No. of Items')
     definition = models.TextField(blank=True)
     amount_of_data = models.TextField(blank=True, null=True)
+    attributes = models.TextField(max_length=2000, blank=True)
     delivery_plan = models.TextField()
     state = models.ForeignKey('State')
     category = models.CharField(max_length=50, choices=DELIVERABLE_CATEGORIES)
