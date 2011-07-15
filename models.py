@@ -120,7 +120,7 @@ class Deliverable(models.Model):
         return self.state.abbreviation + ': ' + self.data_item
     
     def is_satisfied(self):
-        if len(self.submission_set.filter(status='approved')) > 0:
+        if len(self.submission_set.filter(status__in=['approved', 'online'])) > 0:
             return True
         else:
             return False
