@@ -25,6 +25,10 @@ STATUS = dict()
 for item in SUBMISSION_STATUS:
     STATUS[item[0]] = item[1]
     
+YEARS = ((1, 'Year One'),
+         (2, 'Year Two'),
+         (3, 'Year Three'))
+    
 def completion_calc(state, category):
     categorized_deliverables = None;
     if category in ['all']:
@@ -101,15 +105,15 @@ class Deliverable(models.Model):
     # Deliverables defined in a state's statement-of-work
     class Meta:
         ordering = ['data_item']
-        
+    
+    state = models.ForeignKey('State')
+    year = models.IntegerField(choices=YEARS)    
     data_item = models.CharField(max_length=255)
-    #number_of_items = models.IntegerField(verbose_name='Minimum No. of Items')
+    category = models.CharField(max_length=50, choices=DELIVERABLE_CATEGORIES)
     definition = models.TextField(blank=True)
     amount_of_data = models.TextField(blank=True, null=True)
     attributes = models.TextField(max_length=2000, blank=True)
     delivery_plan = models.TextField()
-    state = models.ForeignKey('State')
-    category = models.CharField(max_length=50, choices=DELIVERABLE_CATEGORIES)
     objects = models.GeoManager()
     
     def __unicode__(self):
@@ -127,12 +131,10 @@ class Submission(models.Model):
         ordering = ['date_submitted']
         
     state = models.ForeignKey('State')
+    status = models.CharField(max_length=50, choices=SUBMISSION_STATUS)
     date_submitted = models.DateField()
-    #data_type = models.CharField(max_length=255)
     status_date = models.DateField()
     file_name = models.CharField(max_length=255)
-    #file_location = models.CharField(max_length=255)
-    status = models.CharField(max_length=50, choices=SUBMISSION_STATUS)
     satisfies_deliverable = models.ManyToManyField('Deliverable', verbose_name='Deliverables')
     objects = models.GeoManager()
     
