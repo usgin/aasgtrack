@@ -146,7 +146,7 @@ def build_color_scheme(category):
             scheme[a_state.abbreviation] = ramp[2]
         elif 60 <= complete < 80:
             scheme[a_state.abbreviation] = ramp[1]
-        elif 80 <= complete < 100:
+        elif 80 <= complete <= 100:
             scheme[a_state.abbreviation] = ramp[0]
         else:
             scheme[a_state.abbreviation] = '#BFBFBF'

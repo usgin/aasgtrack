@@ -46,7 +46,7 @@ def completion_calc(state, category):
     satisfied_deliverables = len(online_deliverables) + len(approved_deliverables)
     
     if satisfied_deliverables > deliverable_count:
-        return '100'
+        return 100
     else:
         return ( float(satisfied_deliverables) / deliverable_count ) * 100
     
