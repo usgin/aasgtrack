@@ -132,7 +132,7 @@ class Submission(models.Model):
     state = models.ForeignKey('State')
     status = models.CharField(max_length=50, choices=SUBMISSION_STATUS)
     date_submitted = models.DateField()
-    status_date = models.DateField()
+    status_date = models.DateField(null=True, blank=True)
     file_name = models.CharField(max_length=255)
     satisfies_deliverable = models.ManyToManyField('Deliverable', verbose_name='Deliverables')
     objects = models.GeoManager()

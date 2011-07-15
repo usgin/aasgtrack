@@ -48,6 +48,6 @@ class DeliverableAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'category', 'is_satisfied']
     list_filter = ['category', 'state']
         
-admin.site.register(State, StateAdmin)
+#admin.site.register(State, StateAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Deliverable, DeliverableAdmin)
