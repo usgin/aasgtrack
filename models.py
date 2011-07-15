@@ -127,7 +127,7 @@ class Deliverable(models.Model):
 class Submission(models.Model):
     # Something a state has delivered in order to satisfy a deliverable
     class Meta:
-        ordering = ['date_submitted']
+        ordering = ['-date_submitted']
         
     state = models.ForeignKey('State')
     status = models.CharField(max_length=50, choices=SUBMISSION_STATUS)
