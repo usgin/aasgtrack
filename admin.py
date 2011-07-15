@@ -1,5 +1,6 @@
 from django.contrib.gis import admin
 from models import State, Deliverable, Submission, SubmissionComment
+from datetime import datetime
 
 class CommentInline(admin.TabularInline):
     model = SubmissionComment
@@ -36,6 +37,12 @@ class SubmissionAdmin(admin.ModelAdmin):
     filter_horizontal = ['satisfies_deliverable']
     
     inlines = [CommentInline]
+    
+    def save_model(self, request, obj, form, change):
+        if 'status' in form.changed_data:
+            obj.status_date = datetime.today()
+        
+        obj.save()
 
 class DeliverableAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'category', 'is_satisfied']
