@@ -29,6 +29,11 @@ class SubmissionAdmin(admin.GeoModelAdmin):
     list_display = ['__unicode__', 'date_submitted', 'status']
     
     inlines = [CommentInline]
-    
-admin.site.register(State, StateAdmin)
+
+class DeliverableAdmin(admin.GeoModelAdmin):
+    list_display = ['data_item', 'is_satisfied']
+    list_filter = ['state']
+        
+#admin.site.register(State, StateAdmin)
 admin.site.register(Submission, SubmissionAdmin)
+admin.site.register(Deliverable, DeliverableAdmin)
