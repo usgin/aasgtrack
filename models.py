@@ -41,9 +41,8 @@ def completion_calc(state, category):
     deliverable_count = len(categorized_deliverables)
     if deliverable_count == 0: return None
     
-    online_deliverables = categorized_deliverables.filter(submission__status='online')
-    approved_deliverables = categorized_deliverables.filter(submission__status='approved')
-    satisfied_deliverables = len(online_deliverables) + len(approved_deliverables)
+    online_deliverables = categorized_deliverables.filter(submission__status__in=['online', 'approved']).distinct()
+    satisfied_deliverables = len(online_deliverables)
     
     if satisfied_deliverables > deliverable_count:
         return 100

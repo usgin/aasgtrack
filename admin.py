@@ -22,7 +22,7 @@ class StateAdmin(admin.GeoModelAdmin):
                     'rchem_completion',
                     'submissions_in_review']
     
-    inlines = [DeliverableInline]
+    #inlines = [DeliverableInline]
     
 class SubmissionAdmin(admin.ModelAdmin):
     class Media:
@@ -39,8 +39,8 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 class DeliverableAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'category', 'is_satisfied']
-    list_filter = ['state']
+    list_filter = ['category', 'state']
         
-#admin.site.register(State, StateAdmin)
+admin.site.register(State, StateAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Deliverable, DeliverableAdmin)
