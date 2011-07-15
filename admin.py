@@ -38,7 +38,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     inlines = [CommentInline]
 
 class DeliverableAdmin(admin.ModelAdmin):
-    list_display = ['data_item', 'is_satisfied']
+    list_display = ['data_item', 'category', 'is_satisfied']
     list_filter = ['state']
         
 #admin.site.register(State, StateAdmin)
