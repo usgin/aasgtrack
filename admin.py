@@ -24,13 +24,14 @@ class StateAdmin(admin.GeoModelAdmin):
     
     inlines = [DeliverableInline]
     
-class SubmissionAdmin(admin.GeoModelAdmin):
+class SubmissionAdmin(admin.ModelAdmin):
     list_filter = ['state', 'status']
     list_display = ['__unicode__', 'date_submitted', 'status']
+    filter_horizontal = ['satisfies_deliverable']
     
     inlines = [CommentInline]
 
-class DeliverableAdmin(admin.GeoModelAdmin):
+class DeliverableAdmin(admin.ModelAdmin):
     list_display = ['data_item', 'is_satisfied']
     list_filter = ['state']
         

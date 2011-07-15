@@ -128,11 +128,12 @@ class Submission(models.Model):
         
     state = models.ForeignKey('State')
     date_submitted = models.DateField()
-    data_type = models.CharField(max_length=255)
+    #data_type = models.CharField(max_length=255)
+    status_date = models.DateField()
     file_name = models.CharField(max_length=255)
-    file_location = models.CharField(max_length=255)
+    #file_location = models.CharField(max_length=255)
     status = models.CharField(max_length=50, choices=SUBMISSION_STATUS)
-    satisfies_deliverable = models.ForeignKey('Deliverable')
+    satisfies_deliverable = models.ManyToManyField('Deliverable', verbose_name='Deliverables')
     objects = models.GeoManager()
     
     def __unicode__(self):
