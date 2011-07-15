@@ -25,6 +25,12 @@ class StateAdmin(admin.GeoModelAdmin):
     inlines = [DeliverableInline]
     
 class SubmissionAdmin(admin.ModelAdmin):
+    class Media:
+        js = (
+            'http://code.jquery.com/jquery-1.4.4.min.js',
+            '/track/admin/js/deliverableFilter.js',
+        )
+        
     list_filter = ['state', 'status']
     list_display = ['__unicode__', 'date_submitted', 'status']
     filter_horizontal = ['satisfies_deliverable']

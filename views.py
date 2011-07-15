@@ -173,6 +173,24 @@ def map_scripts(request, js_file_name):
         
     return render_to_response("aasgtrack/map/js/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
 
+def admin_scripts(request, js_file_name):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META['REQUEST_METHOD'] not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
+    the_dict = {}
+    if js_file_name == 'deliverableFilter.js':
+        for state in State.objects.all():
+            deliverables = {}
+            for deliverable in state.deliverable_set.all():
+                deliverables[deliverable.pk] = str(deliverable.__unicode__())
+            
+            the_dict[state.name] = deliverables
+            
+    
+    additional_context = {'filterer': the_dict}
+    return render_to_response("aasgtrack/admin/js/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
+
 def proxy_response_cors_headers(response, methods, headers, hosts=None):
     # Give a response CORS headers
     if hosts == None:
