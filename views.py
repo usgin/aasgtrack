@@ -3,7 +3,6 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, STATUS
-from completion import update_completion
 from colorsys import hsv_to_rgb
 import urllib2
 
@@ -16,7 +15,7 @@ root_colors = {
    'other': float(135) / 360,
    'meta': float(180) / 360,
    'map': float(225) / 360,
-   'lith': float(270) / 360,
+   'well': float(270) / 360,
    'rchem': float(315) / 360
 }
 
@@ -126,38 +125,8 @@ def progress_map(request):
     if request.META['REQUEST_METHOD'] not in valid_requests:
         return HttpResponseNotAllowed(valid_requests)
     
-    return render_to_response('aasgtrack/tracking-map.html', standard_context({}))
+    return render_to_response('aasgtrack/map/tracking-map.html', standard_context({}))
     
-def category_sld(request, category):
-    # Only GET commands are allowed
-    valid_requests = ['GET']
-    if request.META['REQUEST_METHOD'] not in valid_requests:
-        return HttpResponseNotAllowed(valid_requests)
-    
-    # Make sure the category requested is correct
-    if category not in CATEGORIES: raise Http404
-    
-    # All we need is a dictionary: lookup category, get list of HEX colors    
-    hex_color_ramp = category_color_ramp(category)
-        
-    return render_to_response('aasgtrack/category-style.sld', standard_context({ 'category': category, 'colors': hex_color_ramp }), mimetype="application/xml")
-
-def update_state_completion(request, state):
-    # Only GET commands are allowed
-    valid_requests = ['GET']
-    if request.META['REQUEST_METHOD'] not in valid_requests:
-        return HttpResponseNotAllowed(valid_requests)
-    
-    # Requested state abbreviation must be valid
-    if state != None:
-        state = get_object_or_404(State, abbreviation__iexact=state)
-    
-    # Run the update routine
-    update_completion(state)
-    
-    # If it didn't gag, you're done
-    return HttpResponse("<p>Successfully Updated</p>")
-
 def build_color_scheme(category):
     scheme = {}
     #ramp = category_color_ramp(category)
@@ -202,7 +171,7 @@ def map_scripts(request, js_file_name):
         # Add another context variable for the roor colors
         additional_context['root_colors'] = root_hex_colors
         
-    return render_to_response("aasgtrack/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
+    return render_to_response("aasgtrack/map/js/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
 
 def proxy_response_cors_headers(response, methods, headers, hosts=None):
     # Give a response CORS headers

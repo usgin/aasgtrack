@@ -8,7 +8,7 @@ DELIVERABLE_CATEGORIES = (('temp','Temperature & Heatflow'),
                           ('other', 'Other'),
                           ('meta', 'Metadata and Documents'),
                           ('map', 'Map Data'),
-                          ('lith', 'Lithology Logs'),
+                          ('well', 'Well Logs'),
                           ('rchem', 'Rock Chemistry'))
 
 CATEGORIES = dict()
@@ -89,9 +89,9 @@ class State(models.Model):
         return completion_calc(self, 'map')
     map_completion.short_description = CATEGORIES['map']
     
-    def lith_completion(self):
-        return completion_calc(self, 'lith')
-    lith_completion.short_description = CATEGORIES['lith']
+    def well_completion(self):
+        return completion_calc(self, 'well')
+    well_completion.short_description = CATEGORIES['well']
     
     def rchem_completion(self):
         return completion_calc(self, 'rchem')
@@ -151,23 +151,5 @@ class SubmissionComment(models.Model):
     
     def __unicode__(self):
         return str(self.date) + ' -- ' + self.submission.__unicode__()
-    
-class StateCompletion(models.Model):
-    class Meta:
-        ordering = ['state']
-        
-    state = models.ForeignKey('State')
-    temp = models.FloatField(null=True)
-    wchem = models.FloatField(null=True)
-    tect = models.FloatField(null=True)
-    other = models.FloatField(null=True)
-    meta = models.FloatField(null=True)
-    map = models.FloatField(null=True)
-    lith = models.FloatField(null=True)
-    rchem = models.FloatField(null=True)
-    objects = models.GeoManager()
-    
-    def __unicode__(self):
-        return self.state.abbreviation + ": Completion"
 
 

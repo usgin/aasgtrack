@@ -18,7 +18,7 @@ class StateAdmin(admin.GeoModelAdmin):
                     'other_completion',
                     'meta_completion',
                     'map_completion',
-                    'lith_completion',
+                    'well_completion',
                     'rchem_completion',
                     'submissions_in_review']
     

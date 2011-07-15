@@ -9,7 +9,7 @@ var g_stateThemes = {
 		'other': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ other|get:state.abbreviation }}" },{% endfor %} },
 		'meta': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ meta|get:state.abbreviation }}" },{% endfor %} },
 		'map': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ map|get:state.abbreviation }}" },{% endfor %} },
-		'lith': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ lith|get:state.abbreviation }}" },{% endfor %} },
+		'well': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ well|get:state.abbreviation }}" },{% endfor %} },
 		'rchem': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ rchem|get:state.abbreviation }}" },{% endfor %} }
 };
 
