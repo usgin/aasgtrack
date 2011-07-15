@@ -47,6 +47,15 @@ function buildPopup(state, category, feature, map) {
 			popup.show();
 			unpin();
 			
+			if (map == null) {
+				popup.on({
+					close: function() {
+						control = feature.layer.map.controls[2];
+						control.unselectAll();
+					}
+				});
+			}
+			
 		},
 		failure: function() {
 			alert("Request failed.")
