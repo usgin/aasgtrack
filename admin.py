@@ -32,7 +32,7 @@ class SubmissionAdmin(admin.ModelAdmin):
             '/track/admin/js/deliverableFilter.js',
         )
         
-    list_filter = ['state', 'status']
+    list_filter = ['status', 'state']
     list_display = ['__unicode__', 'date_submitted', 'status']
     filter_horizontal = ['satisfies_deliverable']
     

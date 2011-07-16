@@ -51,7 +51,7 @@ function buildPopup(state, category, feature, map) {
 				popup.on({
 					close: function() {
 						control = feature.layer.map.controls[2];
-						control.unselectAll();
+						control.unselect(feature);
 					}
 				});
 			}
