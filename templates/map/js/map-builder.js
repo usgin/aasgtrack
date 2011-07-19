@@ -4,7 +4,7 @@ function buildMapOptions(desiredResolution) {
 	   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	   maxResolution: 156543.0339,
 	   resolutions: [ desiredResolution ],
-	   units: "m", 
+	   units: "m" 
      };
 	
 	return mapOptions;
@@ -89,7 +89,7 @@ function buildMapPanels(maps) {
         width: mapWidth,
         x: 0,
         y: 0,
-        bodyStyle: { border: "1px solid black" },
+        bodyStyle: { border: "1px solid black" }
     });
     
     var alaskaMapPanel = new GeoExt.MapPanel({
@@ -99,7 +99,7 @@ function buildMapPanels(maps) {
     	height: alaskaHeight,
     	x: marginValue,
     	y: continentalMapPanel.height - alaskaHeight - marginValue,
-    	bodyStyle: { border: "1px solid black" },
+    	bodyStyle: { border: "1px solid black" }
     });
     
     var hawaiiMapPanel = new GeoExt.MapPanel({
@@ -109,7 +109,7 @@ function buildMapPanels(maps) {
     	height: hawaiiHeight,
     	x: marginValue + alaskaMapPanel.width + marginValue,
     	y: continentalMapPanel.height - hawaiiHeight - marginValue,
-    	bodyStyle: { border: "1px solid black" },
+    	bodyStyle: { border: "1px solid black" }
     });
     
     // Add a title Panel

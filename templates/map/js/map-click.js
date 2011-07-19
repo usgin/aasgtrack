@@ -58,7 +58,7 @@ function buildPopup(state, category, feature, map) {
 			
 		},
 		failure: function() {
-			alert("Request failed.")
+			alert("Request failed.");
 		}
 	});
 }
@@ -114,9 +114,6 @@ function buildSelectClicker(layer) {
 		{
 			hover: false,
 			onSelect: clickResponse,
-			//onUnselect: function(feature) {
-			//	popup.close();
-			//},
 			renderIntent: "temporary"
 		}
 	)

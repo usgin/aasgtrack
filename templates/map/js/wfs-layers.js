@@ -70,7 +70,7 @@ function wfsStateLayer(name) {
 		  styleMap: new OpenLayers.StyleMap({
 			  strokeWidth: 1,
 			  strokeColor: "#FAFAFA",
-			  fillColor: "#BFBFBF",
+			  fillColor: "#BFBFBF"
 		  })
 		}
 	);

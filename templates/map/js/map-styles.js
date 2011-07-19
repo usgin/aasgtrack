@@ -33,19 +33,19 @@ function buildPointStyleMap() {
 		strokeWidth: 1,
 		strokeColor: "#000000",
 		fillColor: "#999999",
-		pointRadius: 4,
+		pointRadius: 4
 	});
 	
 	var selectStyle = new OpenLayers.Style({
 		strokeWidth: 4,
 		strokeColor: "#FFFF00",
-		pointRadius: 5,
+		pointRadius: 5
 	});
 	
 	var tempStyle = new OpenLayers.Style({
 		strokeWidth: 4,
 		strokeColor: "#37FDFC",
-		pointRadius: 5,
+		pointRadius: 5
 	})
 	
 	var theStyleMap = new OpenLayers.StyleMap({
@@ -114,17 +114,6 @@ function buildPointStyleMap() {
 		// Append the rule to the set
 		theStyleMap.styles["default"].addRules([ thisRule ]);
 	{% endfor %}
-	
-	// Add Rules for the label points
-	//var thisRule = new OpenLayers.Rule({
-	//	filter: new OpenLayers.Filter.Comparison({
-	//		type: OpenLayers.Filter.Comparison.EQUAL_TO,
-	//		property: "category",
-	//		value: "all"
-	//	}),
-	//	symbolizer: { pointRadius: 9, fillColor: "#FFFFFF" }
-	//});
-	//theStyleMap.styles.default.addRules([ thisRule ]);
 		
 	return theStyleMap;	
 }
@@ -134,7 +123,7 @@ function buildCenterPointStyleMap() {
 		strokeWidth: 1,
 		strokeColor: "#000000",
 		fillColor: "#FFFFFF",
-		pointRadius: 9,
+		pointRadius: 9
 	});
 	
 	var theStyleMap = new OpenLayers.StyleMap(defaultStyle);
