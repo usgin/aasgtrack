@@ -5,5 +5,5 @@ urlpatterns = patterns('aasgtrack.views',
     url(r'^map/?$', 'progress_map'),
     url(r'^map/js/(?P<js_file_name>.+\.js)$', 'map_scripts'),
     url(r'^admin/js/(?P<js_file_name>.+\.js)$', 'admin_scripts'),
-    url(r'^proxy.*$', 'service_proxy'),
+    url(r'^proxy.*$', 'service_proxy')
 )
