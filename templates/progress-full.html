@@ -7,21 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
-	<script type="text/javascript">
-		dojo.require("dijit.layout.AccordionContainer");
-		dojo.require("dijit.TitlePane");
-		dojo.require("dijit.layout.SplitContainer");
-		dojo.require("dojox.layout.ExpandoPane");
-		dojo.require("dojox.layout.TableContainer");
-		dojo.require("dijit.form.TextBox");
-		dojo.require("dijit.form.Textarea");
-		dojo.require("dijit.layout.LinkPane")
-		dojo.addOnLoad(function() { 
-			activeState = dijit.byId("{{ state.abbreviation|lower }}-sidebar");
-			accordion = dijit.byId("sidebar-accordion");
-			accordion.selectChild(activeState);
-		});
-	</script>
+	
 {% endblock %}
 
 {% block header %}
@@ -29,85 +15,11 @@
 {% endblock %}
 
 {% block sidebar %}
-	<div dojoType="dijit.layout.AccordionContainer" region="left" id="sidebar-accordion" style="height: 100%; overflow-y: scroll;">
-		{% for member in states %}
-			<div dojoType="dijit.layout.ContentPane" title="{{ member.name }}" id="{{ member.abbreviation|lower }}-sidebar">
-				<a href="/track/{{ member.abbreviation|lower }}/full" class="category-link">
-					{% if category %}
-						<div id="{{ member.abbreviation|lower}}-all" dojoType="dijit.layout.ContentPane" class="category-button">All Deliverables</div>
-					{% else %}
-						<div id="{{ member.abbreviation|lower}}-all" dojoType="dijit.layout.ContentPane" class="category-button category-active">All Deliverables</div>
-					{% endif %}
-				</a>					
-				{% for cat in category_codes %}
-					<a href="/track/{{ member.abbreviation|lower }}/full/{{ cat }}" class="category-link">
-						{% if category_codes|get:cat == category %}
-							<div id="{{ member.abbreviation|lower }}-{{ cat }}" dojoType="dijit.layout.ContentPane" class="category-button category-active">{{ category_codes|get:cat }}</div>			
-						{% else %}
-							<div id="{{ member.abbreviation|lower }}-{{ cat }}" dojoType="dijit.layout.ContentPane" class="category-button">{{ category_codes|get:cat }}</div>
-						{% endif %}						
-					</a>
-				{% endfor %}
-			</div>
-		{% endfor %}
-	</div>
+	
 {% endblock %}
 
 {% block content %}
-	<div id="content-header">
-		{% if category %}
-			<h3>{{ category }} Deliverables</h3>
-		{% else %}
-			<h3>All Deliverables</h3>
-		{% endif %}
-	</div>
-	<div id="content-container" dojoType="dijit.layout.AccordionContainer" style="width: 100%; height: 90%">
-		{% for deliv in deliverables %}
-			<div id="deliverable-{{ deliv.pk }}" dojoType="dijit.layout.ContentPane" open="false" title="{{ deliv.data_item }}">
-				<div id="deliverable-{{ deliv.pk}}-table" dojoType="dojox.layout.TableContainer" cols="1" customClass="deliverable-table">
-					<div id="deliverable-{{ deliv.pk }}-number" dojoType="dijit.layout.ContentPane" title="No. of Items:">{{ deliv.number_of_items }}</div>
-					<div id="deliverable-{{ deliv.pk }}-definition" dojoType="dijit.layout.ContentPane" title="Definition:">{{ deliv.definition }}</div>
-					<div id="deliverable-{{ deliv.pk }}-amount" dojoType="dijit.layout.ContentPane" title="Amount of Data:">{{ deliv.amount_of_data }}</div>
-					<div id="deliverable-{{ deliv.pk }}-delivery" dojoType="dijit.layout.ContentPane" title="Delivery Plan:">{{ deliv.delivery_plan }}</div>
-				</div>
-				{% if deliv.submission_set.all|length > 0 %}
-					<p><strong>Submissions</strong></p>
-				{% else %}
-					<p>No Submissions to Date</p>
-				{% endif %}
-				{% for sub in submissions %}
-					{% if sub.satisfies_deliverable.pk == deliv.pk %}
-						<div id="submission-{{ sub.pk }}" dojoType="dijit.TitlePane" open="false" title="{{ sub.file_name }}" class="submission-status-{{ sub.status }}">
-							<div id="submission-{{ sub.pk}}-table" dojoType="dojox.layout.TableContainer" cols="1" customClass="submission-table">
-								<div id="submission-{{ sub.pk }}-date" dojoType="dijit.layout.ContentPane" title="Submitted On:">{{ sub.date_submitted }}</div>
-								<div id="submission-{{ sub.pk }}-type" dojoType="dijit.layout.ContentPane" title="Data Type:">{{ sub.data_type }}</div>
-								<div id="submission-{{ sub.pk }}-location" dojoType="dijit.layout.ContentPane" title="File Location:">{{ sub.file_location }}</div>
-								<div id="submission-{{ sub.pk }}-status" dojoType="dijit.layout.ContentPane" title="Status:">{{ status_codes|get:sub.status }}</div>
-							</div>
-							{% if sub.status == "approved" or sub.status == "online" %}
-								<p><strong>Online Information</strong></p>
-								<div id="submission-{{ sub.pk}}-online-table" dojoType="dojox.layout.TableContainer" cols="1" customClass="online-info-table">
-									<div id="submission-{{ sub.pk }}-metadata" dojoType="dijit.layout.ContentPane" title="Metadata URL:">Geoportal URL here</div>
-									<div id="submission-{{ sub.pk }}-service" dojoType="dijit.layout.ContentPane" title="Service URL:">WFS/WMS URL here</div>
-									<div id="submission-{{ sub.pk }}-repository" dojoType="dijit.layout.ContentPane" title="File URL:">USGIN Repository or other URL here</div>							
-								</div>
-							{% endif %}
-							<p><strong>Comments</strong></p>
-							{% for com in comments %}
-								{% if com.submission.pk == sub.pk %}
-									<div id="comment-{{ com.pk}}-table" dojoType="dojox.layout.TableContainer" cols="1" customClass="comment-table">
-										<div id="comment-{{ com.pk }}-comment" dojoType="dijit.layout.ContentPane" title="Comment:">{{ com.comment }}</div>
-										<div id="comment-{{ com.pk }}-date" dojoType="dijit.layout.ContentPane" title="Date:">{{ com.date }}</div>
-									</div>
-								{% endif %}
-							{% endfor %}						
-						</div>
-												
-					{% endif %}
-				{% endfor %}
-			</div>
-		{% endfor %}
-	</div>
+	<p>Under Contruction</p>
 {% endblock %}
 
 {% block footer %}
