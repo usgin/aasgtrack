@@ -238,7 +238,7 @@ def service_proxy(request):
         elif url.startswith("http://") or url.startswith("https://"):            
             if method == "POST":
                 headers = {'CONTENT-LENGTH': request.META['CONTENT_LENGTH'],
-                           'CONTENT-TYPE': request.META['CONTENT_TYPE']}
+                           'CONTENT-TYPE': request.META.get('CONTENT_TYPE', 'text/plain')}
                 body = request.raw_post_data
                 r = urllib2.Request(url, body, headers)
                 y = urllib2.urlopen(r)
