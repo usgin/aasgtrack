@@ -54,7 +54,8 @@ def standard_context(additionals):
     context = {'media_url': settings.MEDIA_URL,
                'status_codes': STATUS,
                'category_codes': CATEGORIES,
-               'states': State.objects.all(),}
+               'states': State.objects.all(),
+               'static_url': settings.STATIC_URL,}
     
     for item in additionals:
         context[item] = additionals[item]
