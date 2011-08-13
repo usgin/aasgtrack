@@ -29,6 +29,7 @@ Ext.onReady(function() {
 	};
 	
     // Create the grouping data store
+	//  store.on defines a function to call when loading is complete
 	var store = new Ext.data.GroupingStore({
 		reader: reader,
 		url: 'data',
@@ -57,7 +58,7 @@ Ext.onReady(function() {
 		    {id: 'state', header: 'State', sortable: true, dataIndex: 'state', hidden: true},
 		    {id: 'category', header: 'Content Category', sortable: true, dataIndex: 'category'},
 		    {id: 'deliverableCount', header: 'Number of Deliverables Expected', sortable: true, dataIndex: 'deliverableCount'},
-		    {id: 'completion', header: 'Percent Complete in this Category', sortable: true, dataIndex: 'completion'},
+		    {id: 'completion', header: 'Percent Complete in this Category', sortable: true, dataIndex: 'completion', renderer: function(value) { response = Ext.util.Format.round(value, 2) + '%'; return response;} },
 		    {id: 'recentSubmission', header: 'Date of Most Recent Submission', sortable: true, dataIndex: 'recentSubmission', renderer: Ext.util.Format.dateRenderer('M j, Y')},
 		    {id: 'onlineCount', header: 'Number of Datasets Online', sortable: true, dataIndex: 'onlineCount'},
 		],
