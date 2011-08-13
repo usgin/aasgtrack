@@ -9,6 +9,6 @@ urlpatterns = patterns('aasgtrack.views',
 )
 
 urlpatterns += patterns('aasgtrack.reports',
-    url(r'^report/js/report-table.js$', 'report_table_script'),                       
+    url(r'^report/data', 'data_dump'),                       
     url(r'^report/?$', 'full_report'),                    
 )
