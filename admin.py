@@ -13,15 +13,7 @@ class DeliverableInline(admin.StackedInline):
 class StateAdmin(admin.GeoModelAdmin):
     exclude = ['shape']
     list_display = ['name',
-                    'temp_completion', 
-                    'wchem_completion',
-                    'tect_completion',
-                    'other_completion',
-                    'meta_completion',
-                    'map_completion',
-                    'well_completion',
-                    'rchem_completion',
-                    'submissions_in_review']
+                    'data_host']
     
     #inlines = [DeliverableInline]
     
@@ -48,6 +40,6 @@ class DeliverableAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'category', 'is_satisfied']
     list_filter = ['category', 'state']
         
-#admin.site.register(State, StateAdmin)
+admin.site.register(State, StateAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Deliverable, DeliverableAdmin)
