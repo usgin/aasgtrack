@@ -1,6 +1,12 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
+HOSTING_OPTIONS = (('self', 'Host own data'),
+                   ('az', 'Arizona Hub'),
+                   ('nv', 'Nevada Hub'),
+                   ('il', 'Illinois Hub'),
+                   ('ky', 'Kentucky Hub'))
+
 # Categories for deliverables as defined in Janel's maps
 DELIVERABLE_CATEGORIES = (('temp','Temperature & Heatflow'), 
                           ('wchem', 'Water Chemistry'),
@@ -27,7 +33,8 @@ for item in SUBMISSION_STATUS:
     
 YEARS = ((1, 'Year One'),
          (2, 'Year Two'),
-         (3, 'Year Three'))
+         (3, 'Year Three'),
+         (4, 'Supplemental'))
     
 def completion_calc(state, category):
     categorized_deliverables = None;
@@ -56,6 +63,7 @@ class State(models.Model):
         
     abbreviation = models.CharField(max_length=2)
     name = models.CharField(max_length=50)
+    data_host = models.CharField(max_length=50, choices=HOSTING_OPTIONS)
     shape = models.MultiPolygonField(srid=3857)
     objects = models.GeoManager()
     
