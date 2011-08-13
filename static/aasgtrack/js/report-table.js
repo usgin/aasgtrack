@@ -8,7 +8,7 @@ Ext.onReady(function() {
 		    {name: 'category'},
 		    {name: 'deliverableCount'},
 		    {name: 'completion'},
-		    {name: 'recentSubmission', type: 'date'},
+		    {name: 'recentSubmission', type: 'date', dateFormat: 'Y-m-d'},
 		    {name: 'onlineCount'}
 		]
 	});
