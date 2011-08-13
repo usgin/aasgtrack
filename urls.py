@@ -7,3 +7,8 @@ urlpatterns = patterns('aasgtrack.views',
     url(r'^admin/js/(?P<js_file_name>.+\.js)$', 'admin_scripts'),
     url(r'^proxy.*$', 'service_proxy')
 )
+
+urlpatterns += patterns('aasgtrack.reports',
+    url(r'^report/js/report-table.js$', 'report_table_script'),                       
+    url(r'^report/?$', 'full_report'),                    
+)

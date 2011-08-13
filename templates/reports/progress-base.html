@@ -1,38 +1,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
 	<head>
 	    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	    <title>{% block title %}AASG Submission Tracking{% endblock %}</title>
-	    <link rel="stylesheet" type="text/css" href="{{ media_url }}aasgtrack/dijit/themes/claro/claro.css" />	    
-	    {% block styles %}{% endblock %}	
-    		<!--<script language="javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>-->
-    		<script type="text/javascript" src="{{ media_url }}aasgtrack/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
-    		<script type="text/javascript">
-    			dojo.require("dijit.layout.ContentPane");
-    			dojo.require("dijit.layout.BorderContainer");
-    		</script>
+	    <link rel="stylesheet" type="text/css" href="{{ static_url }}externals/ext-3.2.1/resources/css/ext-all.css" />
+	    {% block styles %}{% endblock %}
+	    <script type="text/javascript" src="{{ static_url }}externals/ext-3.2.1/adapter/ext/ext-base.js"></script>
+		<script type="text/javascript" src="{{ static_url }}externals/ext-3.2.1/ext-all.js"></script>	
 	    {% block scripts %}{% endblock %}
   	</head>
   	{% block body %}
-  	<body class="claro">
-  		<div dojoType="dijit.layout.BorderContainer" design="headline" gutters="true" liveSplitters="false" id="page-container" style="height: 100%">
-		  	<div dojoType="dijit.layout.ContentPane" splitter="false" region="top" style="width: 100%" id="header">
-		  		{% block header %}
-		  		{% endblock %}
-			</div>
-			{% block sidebar %}
-			{% endblock %}
-			<div dojoType="dijit.layout.ContentPane" splitter="true" region="center" id="content">
-		  		{% block content %}
-		  		{% endblock %}
-			</div>
-			{% block footer %}
-				<div dojoType="dijit.layout.ContentPane" splitter="false" region="bottom" style="width: 100%" id="footer">
-			  		<p>Arizona Geological Survey, 2011</p>
-				</div>
-			{% endblock %}
-		</div>
+  	<body>
 	</body>
   	{% endblock %}
 </html>
