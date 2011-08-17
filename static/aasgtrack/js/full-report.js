@@ -4,7 +4,8 @@ Ext.onReady(function() {
 		root: 'rows',
 		totalProperty: 'results',
 		fields: [
-		    {name: 'state'},     
+		    {name: 'state'},
+		    {name: 'state_name'},
 		    {name: 'category'},
 		    {name: 'deliverableCount'},
 		    {name: 'completion'},
@@ -32,8 +33,8 @@ Ext.onReady(function() {
 	//  store.on defines a function to call when loading is complete
 	var store = new Ext.data.GroupingStore({
 		reader: reader,
-		url: 'data',
-		groupField: 'state',			
+		url: 'all-data',
+		groupField: 'state_name',			
 	});	
 	store.on({
 		'load': {
@@ -55,7 +56,7 @@ Ext.onReady(function() {
 		title: 'AASG Geothermal Data System Report',
 		region: 'center',
 		columns: [
-		    {id: 'state', header: 'State', sortable: true, dataIndex: 'state', hidden: true},
+		    {id: 'state_name', header: 'State', sortable: true, dataIndex: 'state_name', hidden: true},
 		    {id: 'category', header: 'Content Category', sortable: true, dataIndex: 'category'},
 		    {id: 'deliverableCount', header: 'Number of Deliverables Expected', sortable: true, dataIndex: 'deliverableCount'},
 		    {id: 'completion', header: 'Percent Complete in this Category', sortable: true, dataIndex: 'completion', renderer: function(value) { response = Ext.util.Format.round(value, 2) + '%'; return response;} },
@@ -64,7 +65,7 @@ Ext.onReady(function() {
 		],
 		view: new Ext.grid.GroupingView({
 			forceFit: true,
-			groupTextTpl: '{text}'
+			groupTextTpl: '<a href="/track/report/{[ values.rs[0].data["state"] ]}">{text}</a>'
 		})
 	});
 	

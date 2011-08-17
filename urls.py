@@ -9,6 +9,8 @@ urlpatterns = patterns('aasgtrack.views',
 )
 
 urlpatterns += patterns('aasgtrack.reports',
-    url(r'^report/data', 'data_dump'),                       
-    url(r'^report/?$', 'full_report'),                    
+    url(r'^report/all-data', 'all_data'),
+    url(r'^report/data', 'state_data'),                       
+    url(r'^report/?$', 'full_report'),
+    url(r'^report/(?P<state>[a-zA-Z]{2})/?$', 'state_report')                    
 )
