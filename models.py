@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 HOSTING_OPTIONS = (('self', 'Host own data'),
                    ('az', 'Arizona Hub'),
@@ -117,7 +118,7 @@ class State(models.Model):
     rchem_completion.short_description = CATEGORIES['rchem']    
 
 class Deliverable(models.Model):
-    # Deliverables defined in a state's statement-of-work
+    # Deliverables defined in a state's statement-of-work!
     class Meta:
         ordering = ['year', 'data_item']
     
@@ -151,10 +152,17 @@ class Submission(models.Model):
     status_date = models.DateField(null=True, blank=True)
     file_name = models.CharField(max_length=255)
     satisfies_deliverable = models.ManyToManyField('Deliverable', verbose_name='Deliverables')
+    service_url = models.URLField( blank=True, verbose_name='Service URL', help_text='If this submission is available as an online service, enter the URL for the service\'s GetCapabilities document.')
+    download_url = models.URLField(blank=True, verbose_name='Download URL', help_text='If this submission is available for download, enter the URL where it can be accessed.')
     objects = models.GeoManager()
     
     def __unicode__(self):
         return self.state.abbreviation + ': ' + self.file_name
+    
+    def clean(self):
+        # Make sure that if status is marked online, then a URL is given
+        if self.status in ['online'] and self.service_url == '' and self.download_url == '':
+            raise ValidationError('Any submission marked "online" must be given either a service or download URL.')
 
 class SubmissionComment(models.Model):
     # Comments about a particular submission
