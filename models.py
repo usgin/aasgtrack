@@ -7,6 +7,10 @@ HOSTING_OPTIONS = (('self', 'Host own data'),
                    ('il', 'Illinois Hub'),
                    ('ky', 'Kentucky Hub'))
 
+HOSTS = dict()
+for item in HOSTING_OPTIONS:
+    HOSTS[item[0]] = item[1]
+
 # Categories for deliverables as defined in Janel's maps
 DELIVERABLE_CATEGORIES = (('temp','Temperature & Heatflow'), 
                           ('wchem', 'Water Chemistry'),
@@ -35,6 +39,10 @@ YEARS = ((1, 'Year One'),
          (2, 'Year Two'),
          (3, 'Year Three'),
          (4, 'Supplemental'))
+
+PROJECT_YEARS = dict()
+for item in YEARS:
+    PROJECT_YEARS[item[0]] = item[1]
     
 def completion_calc(state, category):
     categorized_deliverables = None;
@@ -111,7 +119,7 @@ class State(models.Model):
 class Deliverable(models.Model):
     # Deliverables defined in a state's statement-of-work
     class Meta:
-        ordering = ['data_item']
+        ordering = ['year', 'data_item']
     
     state = models.ForeignKey('State')
     year = models.IntegerField(choices=YEARS)    

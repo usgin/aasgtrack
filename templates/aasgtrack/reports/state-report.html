@@ -1,0 +1,17 @@
+{% extends "aasgtrack/reports/report-base.html" %}
+{% block links %}
+<link rel="stylesheet" type="text/css" href="{{ static_url }}externals/geoext/build/GeoExt/resources/css/geoext-all.css" />
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript" src="{{ static_url }}externals/ext-3.2.1/examples/ux/RowExpander.js"></script>
+<script type="text/javascript" src="{{ static_url }}aasgtrack/js/state-report.js"></script>
+<script src="{{ static_url }}externals/openlayers/OpenLayers.js"></script>
+<script type="text/javascript" src="{{ static_url }}externals/geoext/build/GeoExt/script/GeoExt.js"></script>
+<script type="text/javascript">
+	// Generate the title for the page
+	var pageTitle = 'AASG Geothermal Data System Report for {{ state.name }}'
+	
+	// Generate the data-access URL
+	var theUrl = 'data?state={{ state.abbreviation }}';
+</script>
+{% endblock %}
