@@ -46,7 +46,7 @@ function makeMainGridPanel() {
 		store: store,
 		//frame: true,
 		margins: '5 0 5 5',
-		title: 'Submission Information',
+		title: subTitle, // defined in state-report.html template
 		region: 'center',
 		columns: [
 		    expander,
@@ -95,7 +95,7 @@ function makeOnlineGridPanel() {
 		hideHeaders: true,
 		title: onlineTitle, // onlineTitle defined in state-report.html template
 		region: 'center',
-		margins: '5 5 5 5',
+		margins: '0 0 5 0',
 		columns: [
 		    {id: 'urlType', header: 'Type', dataIndex: 'urlType', hidden: true},
 		    {
@@ -139,7 +139,7 @@ function makeMapPanel() {
 	
 	mainMap = new GeoExt.MapPanel({
         map: thisMap,
-        height: 375,
+        height: 325,
         x: 0,
         y: 0,
         bodyStyle: 'border: none;'
@@ -163,16 +163,13 @@ function makeMapPanel() {
 	});
 	otherMap.addLayer(centerPointLayer);
 	
-	//otherMap.addLayer(wmsPointLayer("LabelLayer"));
-	
 	// Add Pop-ups
 	addClickEvent({ "overlay": otherMap });
 	addHoverEvent({ "overlay": otherMap });
 	
 	overlayMap = new GeoExt.MapPanel({
-		//center: centerPoint,
 		map: otherMap,
-        height: 375,
+        height: 325,
         x: 0,
         y: 0,
         id: 'overlayMap',
@@ -181,10 +178,10 @@ function makeMapPanel() {
 		
 	// Build the panel that will live on the bottom of the right side
 	return new Ext.Panel({
-		title: 'Map View <a href="/track/map/">(Click here for the nationwide map)</a>',
+		title: 'Map View <a href="/track/map">(Click here for the nationwide map)</a>',
 		region: 'south',
-		margins: '0 5 5 5',
-		height: 375,
+		margins: '0 0 0 0',
+		height: 325,
 		layout: 'absolute',
 		items: [ mainMap, overlayMap ]
 	});
@@ -195,7 +192,6 @@ Ext.onReady(function() {
 	var rightPanel = new Ext.Panel({
 		region: 'east',
 		width: 350,
-		//collapsible: true,
 		collapseMode: 'mini',
 		split: true,
 		margins: '5 5 5 0',
@@ -203,22 +199,28 @@ Ext.onReady(function() {
 		items: [
             makeMapPanel(),
             makeOnlineGridPanel()
-		]
+		],
+		bodyStyle: 'background: none; border: none;'
 	});
 	
 	// Make a Title/Header
-	var topPanel = new Ext.Panel({
-		html: '<h1>' + pageTitle + '</h1>', //defined in state-report.html template
+	var topPanel = new Ext.BoxComponent({
+		autoEl: {
+			html: '<a href="http://stategeothermaldata.org"><img src="' + headImgUrl + '"></img></a>', //defined in state-report.html template
+		},
+		style: 'padding-top: 6px; padding-left: 25px;',
 		region: 'north',
 		margins: '5 5 0 5',
-		height: 50
+		height: 100
 	});
 	
 	// Build the Viewport
 	var vp = new Ext.Viewport({
 		layout: 'border',
 		renderTo: document.body,
-		items: [ makeMainGridPanel(), rightPanel, topPanel ]
+		title: pageTitle,
+		items: [ makeMainGridPanel(), rightPanel, topPanel ],
+		style: 'background: #17293D url(' + headerBackUrl + ');'
 	})
     
 });
