@@ -118,13 +118,20 @@ function buildPointStyleMap() {
 	return theStyleMap;	
 }
 
-function buildCenterPointStyleMap() {
-	var defaultStyle = new OpenLayers.Style({
-		strokeWidth: 1,
-		strokeColor: "#000000",
-		fillColor: "#FFFFFF",
-		pointRadius: 9
-	});
+function buildCenterPointStyleMap(useLabels, labelString) {
+	var options = {
+			strokeWidth: 1,
+			strokeColor: "#000000",
+			fillColor: "#FFFFFF",
+			pointRadius: 9
+		};
+	
+	if (useLabels) { 
+		options['label'] = labelString; 
+		options['fontSize'] = '11px'
+	}
+	
+	var defaultStyle = new OpenLayers.Style(options);
 	
 	var theStyleMap = new OpenLayers.StyleMap(defaultStyle);
 	return theStyleMap;

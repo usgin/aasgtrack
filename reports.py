@@ -33,7 +33,53 @@ def all_data(request):
     # Build the JSON object
     response = { 'results': len(records), 'rows': records }
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+def online_state_data(request):
+    # Only GET commands are allowed
+    valid_requests = ['GET']
+    if request.META.get('REQUEST_METHOD') not in valid_requests:
+        return HttpResponseNotAllowed(valid_requests)
     
+    # Check that the requested state is valid
+    if not request.GET: raise Http404('Please provide an appropriate "state" parameter. For example, track/report/data?state=al.')
+    state_abbr = request.GET.get('state', 'none')
+    state = get_object_or_404(State, abbreviation__iexact=state_abbr)
+    
+    # Build a list of records for the GridPanel
+    records = []
+    
+    for submission in state.submission_set.filter(status='online'):
+        # Grab some information about the deliverables that the submission satisfies
+        deliverables = []
+        for deliverable in submission.satisfies_deliverable.all():
+            deliverables.append({'year': PROJECT_YEARS.get(deliverable.year), 'name': deliverable.data_item, 'category': CATEGORIES.get(deliverable.category)})
+        
+        # Add a record for a service (if present)
+        if submission.service_url:
+            record = {'submissionName': submission.file_name }
+            record['urlType'] = 'Services'
+            record['url'] = submission.service_url        
+                
+            record['deliverables'] = deliverables
+            
+            # Append the record
+            records.append(record)
+        
+        # Add a record for a download (if present)
+        if submission.download_url:
+            record = {'submissionName': submission.file_name }
+            record['urlType'] = 'Downloads'
+            record['url'] = submission.download_url
+            
+            record['deliverables'] = deliverables
+            
+            # Append the record
+            records.append(record)        
+    
+    # Build the JSON object
+    response = { 'results': len(records), 'rows': records }
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+        
 def state_data(request):
     # Only GET commands are allowed
     valid_requests = ['GET']
