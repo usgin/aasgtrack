@@ -3,9 +3,11 @@ function buildMapOptions(desiredResolution) {
 	   controls: [ new OpenLayers.Control.Attribution(), ],
 	   maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
 	   maxResolution: 156543.0339,
-	   resolutions: [ desiredResolution ],
 	   units: "m" 
      };
+	if (desiredResolution) {
+		   mapOptions['resolutions'] = [ desiredResolution ];
+	   }
 	
 	return mapOptions;
 }

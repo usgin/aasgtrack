@@ -4,14 +4,81 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript" src="{{ static_url }}externals/ext-3.2.1/examples/ux/RowExpander.js"></script>
-<script type="text/javascript" src="{{ static_url }}aasgtrack/js/state-report.js"></script>
 <script src="{{ static_url }}externals/openlayers/OpenLayers.js"></script>
 <script type="text/javascript" src="{{ static_url }}externals/geoext/build/GeoExt/script/GeoExt.js"></script>
+
+<!-- Scripts to build a little map -->
+<script src="/track/map/js/map-builder.js" type="text/javascript"></script>
+<script src="/track/map/js/map-click.js" type="text/javascript"></script>
+<script src="/track/map/js/map-styles.js" type="text/javascript"></script>
+<script src="/track/map/js/wms-layers.js" type="text/javascript"></script>
+<script src="/track/map/js/wfs-layers.js" type="text/javascript"></script>
+
+<!-- Script to build the report page -->
+<script type="text/javascript" src="{{ static_url }}aasgtrack/js/state-report.js"></script>
+
 <script type="text/javascript">
-	// Generate the title for the page
-	var pageTitle = 'AASG Geothermal Data System Report for {{ state.name }}'
+	// Generate various titles
+	var pageTitle = 'AASG Geothermal Data System Report for {{ state.name }}';
+	var onlineTitle = '{{ state.name }} Data Available Online';
+	var subTitle = 'Submission Tracking for {{ state.name }}';
+	var headerBackUrl = '{{ static_url }}aasgtrack/img/header-background.gif';
+	var headImgUrl = '{{ static_url }}aasgtrack/img/geotherm-header.png';
 	
 	// Generate the data-access URL
 	var theUrl = 'data?state={{ state.abbreviation }}';
+	
+	// Generate the online data-access URL
+	var theOnlineUrl = 'data/online?state={{ state.abbreviation }}';
+	
+	// Generate the OGC Filter to pick one state out of a WFS
+	var stateStrategy = new OpenLayers.Strategy.Filter({
+			filter : new OpenLayers.Filter.Comparison({
+			   	type: OpenLayers.Filter.Comparison.EQUAL_TO,
+			   	property: "abbreviation",
+			 	value: "{{ state.abbreviation }}"
+			})
+		});
+		
+	// Generate an OGC Filter to pick the correct flowers from the point WFS
+	var pointStrategy = new OpenLayers.Strategy.Filter({
+		filter: new OpenLayers.Filter.Logical({
+			type: OpenLayers.Filter.Logical.AND,
+			filters: [
+				new OpenLayers.Filter.Comparison({
+				   	type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
+				   	property: "category",
+				 	value: "all"
+				}),
+				new OpenLayers.Filter.Comparison({
+					type: OpenLayers.Filter.Comparison.EQUAL_TO,
+					property: "state",
+					value: "{{ state.abbreviation }}"
+				})
+			]
+		})
+	});
+	
+	var centerStrategy = new OpenLayers.Strategy.Filter({
+		filter: new OpenLayers.Filter.Logical({
+			type: OpenLayers.Filter.Logical.AND,
+			filters: [
+				new OpenLayers.Filter.Comparison({
+				   	type: OpenLayers.Filter.Comparison.EQUAL_TO,
+				   	property: "category",
+				 	value: "all"
+				}),
+				new OpenLayers.Filter.Comparison({
+					type: OpenLayers.Filter.Comparison.EQUAL_TO,
+					property: "state",
+					value: "{{ state.abbreviation }}"
+				})
+			]
+		})
+	});
+	
+	// Choose the right resolution and initial center for the flowers to be displayed. State-specific
+	var resolution = {% if state.abbreviation == 'AK' %}25650{% endif %}{% if state.abbreviation == 'HI' %}4892{% endif %}{% if state.abbreviation != 'AK' and state.abbreviation != 'HI' %}6650{% endif %};
+	var centerPoint = {% if state.abbreviation == 'AK' %}new OpenLayers.LonLat(-16793594, 9376849){% endif %}{% if state.abbreviation == 'HI' %}new OpenLayers.LonLat(-17532836, 2356488){% endif %}{% if state.abbreviation != 'AK' and state.abbreviation != 'HI' %}new OpenLayers.LonLat(-10691131, 4705637){% endif %};
 </script>
 {% endblock %}
