@@ -25,7 +25,7 @@ function buildPopup(state, category, feature, map) {
 			}
 			
 			var popupParameters = {
-				title: '<a href="/track/report/' + state + '">' + title + '</a>',
+				title: '<a href="/track/report/' + state + '" target="_blank">' + title + '</a>',
 				location: feature,
 				width: 250,
 				html: result.responseText,

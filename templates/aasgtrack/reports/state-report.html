@@ -18,11 +18,12 @@
 <script type="text/javascript" src="{{ static_url }}aasgtrack/js/state-report.js"></script>
 
 <script type="text/javascript">
-	// Generate the title for the page
+	// Generate various titles
 	var pageTitle = 'AASG Geothermal Data System Report for {{ state.name }}';
-	
-	// Generate the title for the online data panel
 	var onlineTitle = '{{ state.name }} Data Available Online';
+	var subTitle = 'Submission Tracking for {{ state.name }}';
+	var headerBackUrl = '{{ static_url }}aasgtrack/img/header-background.gif';
+	var headImgUrl = '{{ static_url }}aasgtrack/img/geotherm-header.png';
 	
 	// Generate the data-access URL
 	var theUrl = 'data?state={{ state.abbreviation }}';
