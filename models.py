@@ -154,6 +154,7 @@ class Submission(models.Model):
     satisfies_deliverable = models.ManyToManyField('Deliverable', verbose_name='Deliverables')
     service_url = models.URLField( blank=True, verbose_name='Service URL', help_text='If this submission is available as an online service, enter the URL for the service\'s GetCapabilities document.')
     download_url = models.URLField(blank=True, verbose_name='Download URL', help_text='If this submission is available for download, enter the URL where it can be accessed.')
+    number_of_records = models.IntegerField(blank=True, null=True, help_text='If this submission is available online as a service or for download, please enter the number of records contained in the dataset.')
     objects = models.GeoManager()
     
     def __unicode__(self):
@@ -163,6 +164,8 @@ class Submission(models.Model):
         # Make sure that if status is marked online, then a URL is given
         if self.status in ['online'] and self.service_url == '' and self.download_url == '':
             raise ValidationError('Any submission marked "online" must be given either a service or download URL.')
+        if self.status in ['online'] and self.number_of_records == None:
+            raise ValidationError('Any submission marked "online" must be given a record count.')
 
 class SubmissionComment(models.Model):
     # Comments about a particular submission
