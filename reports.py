@@ -26,7 +26,14 @@ def all_data(request):
                 record['recentSubmission'] = these_submissions[0].date_submitted.isoformat()
             else:
                 record['recentSubmission'] = 'None'
-            record['onlineCount'] = len(these_submissions.filter(status__in=['online', 'approved']))
+                
+            # Count the number of records available online
+            recordCount = 0
+            for online_submission in these_submissions.filter(status__in=['online']):
+                if online_submission.number_of_records:
+                    recordCount = recordCount + online_submission.number_of_records
+                    
+            record['onlineCount'] = recordCount
             
             records.append(record)
             
