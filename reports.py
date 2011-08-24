@@ -1,4 +1,4 @@
-from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, HOSTS, STATUS, PROJECT_YEARS
+from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, HOSTS, STATUS, PROJECT_YEARS, completed_deliverables, get_completion_percent
 from views import standard_context
 from django.shortcuts import get_object_or_404, get_list_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseNotAllowed, Http404
@@ -10,9 +10,21 @@ def all_data(request):
     if request.META.get('REQUEST_METHOD') not in valid_requests:
         return HttpResponseNotAllowed(valid_requests)
     
+    # Check that the requested state is valid
+    state_abbr = request.GET.get('state', 'none')
+    if state_abbr == 'none':
+        states = State.objects.exclude(abbreviation='DC')
+    else:
+        states = get_list_or_404(State, abbreviation__iexact=state_abbr)
+    
     # Generate a list of records for the GridPanel
     records = []
-    for this_state in State.objects.all():
+    grandTotalRecords = 0
+    grandTotalDeliverables = 0
+    
+    for this_state in states:
+        totalRecords = 0
+        completedDeliverables = 0
         for category in CATEGORIES:
             these_deliverables = Deliverable.objects.filter(state=this_state).filter(category=category)
             if len(these_deliverables) == 0: continue
@@ -21,7 +33,13 @@ def all_data(request):
             
             record = { 'state': this_state.abbreviation, 'state_name': this_state.name, 'category': CATEGORIES.get(category) }
             record['deliverableCount'] = len(these_deliverables)
-            record['completion'] = this_state.category_completion(category)
+            
+            satisfied, total = completed_deliverables(this_state, category)
+            record['deliverablesComplete'] = satisfied
+            completedDeliverables = completedDeliverables + satisfied
+            grandTotalDeliverables = grandTotalDeliverables + satisfied
+            
+            record['completion'] = get_completion_percent(satisfied, total)
             if these_submissions:
                 record['recentSubmission'] = these_submissions[0].date_submitted.isoformat()
             else:
@@ -29,14 +47,35 @@ def all_data(request):
                 
             # Count the number of records available online
             recordCount = 0
-            for online_submission in these_submissions.filter(status__in=['online']):
+            for online_submission in these_submissions.filter(status__in=['onlinget_completion_percente']):
                 if online_submission.number_of_records:
                     recordCount = recordCount + online_submission.number_of_records
+                    totalRecords = totalRecords + recordCount
+                    grandTotalRecords = grandTotalRecords + recordCount
                     
             record['onlineCount'] = recordCount
             
             records.append(record)
             
+        # Create a "summary" record
+        record = { 'state': this_state.abbreviation, 'state_name': this_state.name, 'category': 'Totals for ' + this_state.name }
+        record['deliverableCount'] = len(this_state.deliverable_set.all())
+        record['deliverablesComplete'] = completedDeliverables
+        record['completion'] = ( float(completedDeliverables) / len(this_state.deliverable_set.all()) ) * 100
+        record['onlineCount'] = totalRecords
+        
+        records.append(record)
+        
+    # Create a system-wide summary record if we were asked for all the data
+    if len(states) != 1:
+        record = { 'state': 'AA', 'state_name': ' System-Wide', 'category': 'System-Wide Totals' }
+        record['deliverableCount'] = len(Deliverable.objects.all())
+        record['deliverablesComplete'] = grandTotalDeliverables
+        record['completion'] = ( float(grandTotalDeliverables) / len(Deliverable.objects.all()) ) * 100
+        record['onlineCount'] = grandTotalRecords
+        
+        records.insert(0, record)
+    
     # Build the JSON object
     response = { 'results': len(records), 'rows': records }
     return HttpResponse(json.dumps(response), mimetype="application/json")

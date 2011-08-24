@@ -44,8 +44,8 @@ YEARS = ((1, 'Year One'),
 PROJECT_YEARS = dict()
 for item in YEARS:
     PROJECT_YEARS[item[0]] = item[1]
-    
-def completion_calc(state, category):
+
+def completed_deliverables(state, category):
     categorized_deliverables = None;
     if category in ['all']:
         categorized_deliverables = state.deliverable_set.all()
@@ -60,10 +60,18 @@ def completion_calc(state, category):
     online_deliverables = categorized_deliverables.filter(submission__status__in=['online', 'approved']).distinct()
     satisfied_deliverables = len(online_deliverables)
     
-    if satisfied_deliverables > deliverable_count:
+    return satisfied_deliverables, deliverable_count
+
+def get_completion_percent(satisfied, total):
+    if satisfied > total:
         return 100
     else:
-        return ( float(satisfied_deliverables) / deliverable_count ) * 100
+        return ( float(satisfied) / total ) * 100
+            
+def completion_calc(state, category):
+    satisfied_deliverables, deliverable_count = completed_deliverables(state, category)
+    
+    return get_completion_percent(satisfied_deliverables, deliverable_count)
     
 class State(models.Model):
     # One for each state. Just for geometries and categorization really.
