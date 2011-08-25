@@ -18,11 +18,11 @@ var metricsReader = new Ext.data.JsonReader({
 var metricsColumns = [
     {id: 'state_name', header: 'State', sortable: true, dataIndex: 'state_name', hidden: true},
     {id: 'category', header: 'Content Category', sortable: true, dataIndex: 'category'},
-    {id: 'deliverableCount', header: 'Number of Deliverables Expected', sortable: true, dataIndex: 'deliverableCount'},
-    {id: 'deliverablesComplete', header: 'Number of Completed Deliverables', sortable: true, dataIndex: 'deliverablesComplete'},
+    {id: 'deliverableCount', header: 'Expected Deliverables', sortable: true, dataIndex: 'deliverableCount'},
+    {id: 'deliverablesComplete', header: 'Completed Deliverables', sortable: true, dataIndex: 'deliverablesComplete'},
     {id: 'completion', header: 'Percent Complete', sortable: true, dataIndex: 'completion', renderer: function(value) { response = Ext.util.Format.round(value, 2) + '%'; return response;} },
-    {id: 'onlineCount', header: 'Number of Records Online', sortable: true, dataIndex: 'onlineCount'},
-    {id: 'recentSubmission', header: 'Date of Most Recent Submission', sortable: true, dataIndex: 'recentSubmission', renderer: Ext.util.Format.dateRenderer('M j, Y')}
+    {id: 'onlineCount', header: 'Records Online', sortable: true, dataIndex: 'onlineCount'},
+    {id: 'recentSubmission', header: 'Most Recent Submission', sortable: true, dataIndex: 'recentSubmission', renderer: Ext.util.Format.dateRenderer('M j, Y')}
 ];
 
 var metricsGroupView = new Ext.grid.GroupingView({
