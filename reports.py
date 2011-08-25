@@ -212,9 +212,17 @@ def state_data(request):
             record['deliverableCategory'] = CATEGORIES.get(deliverable.category)
             
             record['submissionTitle'] = 'No submissions yet...'
+            record['noExpansion'] = True
             
             records.append(record)
-            
+    
+    # Generate dummy records if there is nothing to show
+    if len(records) == 0:
+        record = { 'state': state.abbreviation }
+        record['deliverableName'] = 'No contracted deliverables yet...'
+        record['noExpansion'] = True
+        records.append(record)
+        
     # Build the JSON object
     response = { 'results': len(records), 'rows': records }
     return HttpResponse(json.dumps(response), mimetype="application/json")
