@@ -16,20 +16,21 @@
 
 <!-- Script to build the report page -->
 <script type="text/javascript" src="{{ static_url }}aasgtrack/js/state-report.js"></script>
+<script type="text/javascript" src="{{ static_url }}aasgtrack/js/metrics-data.js"></script>
 
 <script type="text/javascript">
 	// Generate various titles
 	var pageTitle = 'AASG Geothermal Data System Report for {{ state.name }}';
 	var onlineTitle = '{{ state.name }} Data Available Online';
 	var subTitle = 'Submission Tracking for {{ state.name }}';
+	var summaryTitle = 'Summary Report for {{ state.name }}';
+	
+	// Generate various URLs
+	var theUrl = 'data?state={{ state.abbreviation }}';
+	var summaryUrl = 'all-data?state={{ state.abbreviation }}';
+	var theOnlineUrl = 'data/online?state={{ state.abbreviation }}';
 	var headerBackUrl = '{{ static_url }}aasgtrack/img/header-background.gif';
 	var headImgUrl = '{{ static_url }}aasgtrack/img/geotherm-header.png';
-	
-	// Generate the data-access URL
-	var theUrl = 'data?state={{ state.abbreviation }}';
-	
-	// Generate the online data-access URL
-	var theOnlineUrl = 'data/online?state={{ state.abbreviation }}';
 	
 	// Generate the OGC Filter to pick one state out of a WFS
 	var stateStrategy = new OpenLayers.Strategy.Filter({

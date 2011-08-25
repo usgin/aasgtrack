@@ -1,20 +1,4 @@
 Ext.onReady(function() {
-	// Create a data reader
-	var reader = new Ext.data.JsonReader({
-		root: 'rows',
-		totalProperty: 'results',
-		fields: [
-		    {name: 'state'},
-		    {name: 'state_name'},
-		    {name: 'category'},
-		    {name: 'deliverableCount'},
-		    {name: 'deliverablesComplete'},
-		    {name: 'completion'},
-		    {name: 'recentSubmission', type: 'date', dateFormat: 'Y-m-d'},
-		    {name: 'onlineCount'}
-		]
-	});
-	
 	// Create a loading message
 	var loadMsg = {
 			'showLoading': function() {
@@ -26,14 +10,14 @@ Ext.onReady(function() {
 				});					
 			},
 			'hideLoading': function() {
-				Ext.MessageBox.hide();gridpanel
+				Ext.MessageBox.hide();
 			}
 	};
 	
     // Create the grouping data store
 	//  store.on defines a function to call when loading is complete
 	var store = new Ext.data.GroupingStore({
-		reader: reader,
+		reader: metricsReader, // defined in metrics-data.js
 		url: 'all-data',
 		groupField: 'state_name'
 	});	
@@ -56,21 +40,12 @@ Ext.onReady(function() {
 		frame: true,
 		title: 'AASG Geothermal Data System-Wide Report',
 		region: 'center',
-		columns: [
-		    {id: 'state_name', header: 'State', sortable: true, dataIndex: 'state_name', hidden: true},
-		    {id: 'category', header: 'Content Category', sortable: true, dataIndex: 'category'},
-		    {id: 'deliverableCount', header: 'Number of Deliverables Expected', sortable: true, dataIndex: 'deliverableCount'},
-		    {id: 'deliverablesComplete', header: 'Number of Completed Deliverables', sortable: true, dataIndex: 'deliverablesComplete'},
-		    {id: 'completion', header: 'Percent Complete', sortable: true, dataIndex: 'completion', renderer: function(value) { response = Ext.util.Format.round(value, 2) + '%'; return response;} },
-		    {id: 'onlineCount', header: 'Number of Records Online', sortable: true, dataIndex: 'onlineCount'},
-		    {id: 'recentSubmission', header: 'Date of Most Recent Submission', sortable: true, dataIndex: 'recentSubmission', renderer: Ext.util.Format.dateRenderer('M j, Y')}
-		],
+		columns: metricsColumns, // defined in metrics-data.js
 		margins: '5 5 5 5',
-		view: new Ext.grid.GroupingView({
-			forceFit: true,
-			groupTextTpl: '<a href="/track/report/{[ values.rs[0].data["state"] ]}">{text}</a>'
-		})
+		view: metricsGroupView, // defined in metrics-data.js
+		enableColumnHide: false
 	});
+	
 	// Make a Title/Header
 	var topPanel = new Ext.BoxComponent({
 		autoEl: {

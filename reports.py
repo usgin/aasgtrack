@@ -55,6 +55,8 @@ def all_data(request):
                     
             record['onlineCount'] = recordCount
             
+            # Add the group-label
+            record['groupLabel'] = '<a href="/track/report/' + this_state.abbreviation + '">State: ' + this_state.name + '</a>'
             records.append(record)
             
         # Create a "summary" record
@@ -68,11 +70,12 @@ def all_data(request):
         
     # Create a system-wide summary record if we were asked for all the data
     if len(states) != 1:
-        record = { 'state': 'AA', 'state_name': ' System-Wide', 'category': 'System-Wide Totals' }
+        record = { 'state': 'AA', 'state_name': ' System-Wide', 'category': 'All States, All Cateogries' }
         record['deliverableCount'] = len(Deliverable.objects.all())
         record['deliverablesComplete'] = grandTotalDeliverables
         record['completion'] = ( float(grandTotalDeliverables) / len(Deliverable.objects.all()) ) * 100
         record['onlineCount'] = grandTotalRecords
+        record['groupLabel'] = 'State-Wide System Totals'
         
         records.insert(0, record)
     
@@ -93,6 +96,8 @@ def online_state_data(request):
     
     # Build a list of records for the GridPanel
     records = []
+    downloads = 0
+    services = 0
     
     for submission in state.submission_set.filter(status='online'):
         # Grab some information about the deliverables that the submission satisfies
@@ -105,23 +110,35 @@ def online_state_data(request):
             record = {'submissionName': submission.file_name }
             record['urlType'] = 'Services'
             record['url'] = submission.service_url        
-                
+            record['label'] = '<a href="' + submission.service_url + '">' + submission.file_name + '</a>'
+            
             record['deliverables'] = deliverables
             
             # Append the record
             records.append(record)
+            services = services + 1
         
         # Add a record for a download (if present)
         if submission.download_url:
             record = {'submissionName': submission.file_name }
             record['urlType'] = 'Downloads'
             record['url'] = submission.download_url
+            record['label'] = '<a href="' + submission.service_url + '">' + submission.file_name + '</a>'
             
             record['deliverables'] = deliverables
             
             # Append the record
-            records.append(record)        
+            records.append(record)
+            downloads = downloads + 1        
     
+    # Generate dummy records if there is nothing to show
+    if services == 0:
+        record = {'label': 'No services online', 'urlType': 'Services', }
+        records.append(record)
+    if downloads == 0:
+        record = {'label': 'No downloads available', 'urlType': 'Downloads'}
+        records.append(record)
+        
     # Build the JSON object
     response = { 'results': len(records), 'rows': records }
     return HttpResponse(json.dumps(response), mimetype="application/json")

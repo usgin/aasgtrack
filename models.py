@@ -50,12 +50,12 @@ def completed_deliverables(state, category):
     if category in ['all']:
         categorized_deliverables = state.deliverable_set.all()
     elif category not in CATEGORIES: 
-        return None
+        return None, None
     else:
         categorized_deliverables = state.deliverable_set.filter(category=category)
         
     deliverable_count = len(categorized_deliverables)
-    if deliverable_count == 0: return None
+    if deliverable_count == 0: return None, None
     
     online_deliverables = categorized_deliverables.filter(submission__status__in=['online', 'approved']).distinct()
     satisfied_deliverables = len(online_deliverables)
@@ -70,6 +70,8 @@ def get_completion_percent(satisfied, total):
             
 def completion_calc(state, category):
     satisfied_deliverables, deliverable_count = completed_deliverables(state, category)
+    if satisfied_deliverables == None or deliverable_count == None:
+        return None
     
     return get_completion_percent(satisfied_deliverables, deliverable_count)
     

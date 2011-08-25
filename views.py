@@ -134,7 +134,7 @@ def build_color_scheme(category):
     ramp = hex_color_ramps[category]
     
     # Loop through States
-    for a_state in State.objects.all():
+    for a_state in State.objects.exclude(abbreviation='DC'):
         # Get the state's completion percentage in this category
         complete = a_state.category_completion(category)
         
@@ -181,7 +181,7 @@ def admin_scripts(request, js_file_name):
         return HttpResponseNotAllowed(valid_requests)
     the_dict = {}
     if js_file_name == 'deliverableFilter.js':
-        for state in State.objects.all():
+        for state in State.objects.exclude(abbreviation='DC'):
             deliverables = {}
             for deliverable in state.deliverable_set.all():
                 deliverables[deliverable.pk] = str(deliverable.__unicode__())

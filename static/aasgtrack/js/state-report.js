@@ -1,6 +1,31 @@
 var thisMap;
 var otherMap;
 
+function makeSummaryGridPanel() {
+	// Create the grouping data store
+	var store = new Ext.data.GroupingStore({
+		reader: metricsReader, // defined in metrics-data.js
+		url: summaryUrl, //defined in state-report.html
+		groupField: 'state_name'
+	});
+	
+	// Load the store
+	store.load();
+	
+	// Make the Data Grid
+	var grid = new Ext.grid.GridPanel({
+		store: store,
+		frame: true,
+		title: summaryTitle, //defined in state-report.html
+		region: 'north',
+		columns: metricsColumns, // defined in metrics-data.js
+		view: metricsGroupView, // defined in metrics-data.js
+		height: 275
+	});
+	
+	return grid;
+}
+
 function makeMainGridPanel() {
 	// Create a reader
 	var reader = new Ext.data.JsonReader({
@@ -45,9 +70,10 @@ function makeMainGridPanel() {
 	var grid = new Ext.grid.GridPanel({
 		store: store,
 		//frame: true,
-		margins: '5 0 5 5',
+		margins: '5 0 0 0',
 		title: subTitle, // defined in state-report.html template
 		region: 'center',
+		frame: true,
 		columns: [
 		    expander,
 		    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
@@ -74,7 +100,8 @@ function makeOnlineGridPanel() {
 		    {name: 'urlType'},     
 		    {name: 'url'},
 		    {name: 'submissionName'},
-		    {name: 'deliverables'}
+		    {name: 'deliverables'},
+		    {name: 'label'}
 		]
 	});
 	
@@ -93,6 +120,7 @@ function makeOnlineGridPanel() {
 	var grid = new Ext.grid.GridPanel({
 		store: store,
 		hideHeaders: true,
+		frame: true,
 		title: onlineTitle, // onlineTitle defined in state-report.html template
 		region: 'center',
 		margins: '0 0 5 0',
@@ -104,7 +132,7 @@ function makeOnlineGridPanel() {
 		    	sortable: true,
 		    	dataIndex: 'submissionName',
 		    	xtype: 'templatecolumn',
-		    	tpl: '<a href="{url}">{submissionName}</a>'
+		    	tpl: '{label}'
 		    }
 		],
 		view: new Ext.grid.GroupingView({
@@ -131,8 +159,6 @@ function makeMapPanel() {
 		stateExtent = wfsLayer.features[0].geometry.getBounds();
 		thisMap.zoomToExtent(stateExtent);
 		
-		//point = wfsLayer.features[0].geometry.getCentroid();
-		//otherMap.panTo(new OpenLayers.LonLat(point.x, point.y));
 		otherMap.panTo(thisMap.getCenter());
 	});
 	thisMap.addLayer(wfsLayer);
@@ -181,7 +207,7 @@ function makeMapPanel() {
 		title: 'Map View <a href="/track/map">(Click here for the nationwide map)</a>',
 		region: 'south',
 		margins: '0 0 0 0',
-		height: 325,
+		height: 347,
 		layout: 'absolute',
 		items: [ mainMap, overlayMap ]
 	});
@@ -192,9 +218,7 @@ Ext.onReady(function() {
 	var rightPanel = new Ext.Panel({
 		region: 'east',
 		width: 350,
-		collapseMode: 'mini',
-		split: true,
-		margins: '5 5 5 0',
+		margins: '5 5 5 5',
 		layout: 'border',
 		items: [
             makeMapPanel(),
@@ -214,12 +238,24 @@ Ext.onReady(function() {
 		height: 100
 	});
 	
+	// Build the main panel with two Grids inside it
+	var mainPanel = new Ext.Panel({
+		layout: 'border',
+		items: [
+	        makeMainGridPanel(),
+	        makeSummaryGridPanel()
+		],
+		region: 'center',
+		bodyStyle: 'background: none; border: none;',
+		margins: '5 0 5 5'
+	});
+	
 	// Build the Viewport
 	var vp = new Ext.Viewport({
 		layout: 'border',
 		renderTo: document.body,
 		title: pageTitle,
-		items: [ makeMainGridPanel(), rightPanel, topPanel ],
+		items: [ mainPanel, rightPanel, topPanel ],
 		style: 'background: #17293D url(' + headerBackUrl + ');'
 	})
     
