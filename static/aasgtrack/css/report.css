@@ -6,6 +6,11 @@
 	font-weight: bold;
 }
 
+.submission-status {
+	font-weight: bold;
+	font-style: italic;
+}
+
 .submission-row {
 	background: #EDF3FA;
 }

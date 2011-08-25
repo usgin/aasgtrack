@@ -183,7 +183,7 @@ def state_data(request):
             
             # Add information to the record about the submission
             record['submissionFile'] = submission.file_name
-            record['submissionStatus'] = STATUS.get(submission.status) + ' as of ' + submission.status_date.strftime('%b %d, %Y')
+            record['submissionStatus'] = '<span class="submission-status">' + STATUS.get(submission.status) + '</span> as of ' + submission.status_date.strftime('%b %d, %Y')
             record['submissionStatDate'] = submission.status_date.isoformat()
             record['submissionSubDate'] = submission.date_submitted.isoformat()
             record['submissionTitle'] = submission.title

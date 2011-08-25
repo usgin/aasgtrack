@@ -51,10 +51,12 @@ function makeMainGridPanel() {
 	});
 	
 	// Create a #@$!!&^-ing template for the expander
-	var thisTpl = new Ext.XTemplate('<p style="padding-left:25px;"><span style="font-weight: bold;">File Name:</span> {submissionFile}',
-									'<p style="padding-left:25px; font-weight: bold;">Comments:</p>', 
+	var thisTpl = new Ext.XTemplate('<p style="padding-left:25px;"><span style="font-style: italic;">File Name:</span> {submissionFile}',
+									'<tpl if="submissionComments!=\'\'">',
+									'<p style="padding-left:25px; font-style: italic;">Comments:</p>', 
 									'<tpl for="submissionComments">', 
 									'<p style="padding-left:30px;"> -- {.}</p>', 
+									'</tpl>',
 									'</tpl>'
 	);
 		
@@ -82,7 +84,7 @@ function makeMainGridPanel() {
 			frame: true,
 			columns: [
 			    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
-			    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle', css: 'font-weight: bold; font-size: 12px;'},
+			    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle', css: 'font-weight: bold;'},
 			    {id: 'submissionSubDate', header: 'Submitted On', sortable: true, dataIndex: 'submissionSubDate', renderer: Ext.util.Format.dateRenderer('M j, Y')},
 			    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}		
 			],
