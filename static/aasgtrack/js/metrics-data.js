@@ -11,7 +11,8 @@ var metricsReader = new Ext.data.JsonReader({
 	    {name: 'completion'},
 	    {name: 'recentSubmission', type: 'date', dateFormat: 'Y-m-d'},
 	    {name: 'onlineCount'},
-	    {name: 'groupLabel'}
+	    {name: 'groupLabel'},
+	    {name: 'summary'}
 	]
 });
 
@@ -30,5 +31,10 @@ var metricsGroupView = new Ext.grid.GroupingView({
 	groupTextTpl: '{[ values.rs[0].data["groupLabel"] ]}',
 	hideGroupedColumn: true,
 	enableNoGroups: false,
-	enableGroupingMenu: false
+	enableGroupingMenu: false,
+	getRowClass: function(record, index, rp, store) {
+		if (record.data['summary']) {
+			return 'summary-row';
+		}
+	}
 });

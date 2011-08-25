@@ -59,12 +59,13 @@ def all_data(request):
             record['groupLabel'] = '<a href="/track/report/' + this_state.abbreviation + '">State: ' + this_state.name + '</a>'
             records.append(record)
             
-        # Create a "summary" record
+        # Create a "summary" record for this state
         record = { 'state': this_state.abbreviation, 'state_name': this_state.name, 'category': 'Totals for ' + this_state.name }
         record['deliverableCount'] = len(this_state.deliverable_set.all())
         record['deliverablesComplete'] = completedDeliverables
         record['completion'] = ( float(completedDeliverables) / len(this_state.deliverable_set.all()) ) * 100
         record['onlineCount'] = totalRecords
+        record['summary'] = True
         
         records.append(record)
         
@@ -76,6 +77,7 @@ def all_data(request):
         record['completion'] = ( float(grandTotalDeliverables) / len(Deliverable.objects.all()) ) * 100
         record['onlineCount'] = grandTotalRecords
         record['groupLabel'] = 'State-Wide System Totals'
+        record['summary'] = True
         
         records.insert(0, record)
     
@@ -110,8 +112,8 @@ def online_state_data(request):
             record = {'submissionName': submission.file_name }
             record['urlType'] = 'Services'
             record['url'] = submission.service_url        
-            record['label'] = '<a href="' + submission.service_url + '">' + submission.file_name + '</a>'
-            
+            record['label'] = '<a href="' + submission.service_url + '">' + submission.title + '</a>'
+    
             record['deliverables'] = deliverables
             
             # Append the record
@@ -123,7 +125,7 @@ def online_state_data(request):
             record = {'submissionName': submission.file_name }
             record['urlType'] = 'Downloads'
             record['url'] = submission.download_url
-            record['label'] = '<a href="' + submission.service_url + '">' + submission.file_name + '</a>'
+            record['label'] = '<a href="' + submission.service_url + '">' + submission.title + '</a>'
             
             record['deliverables'] = deliverables
             
@@ -176,6 +178,7 @@ def state_data(request):
             record['submissionStatus'] = STATUS.get(submission.status) + ' as of ' + submission.status_date.strftime('%b %d, %Y')
             record['submissionStatDate'] = submission.status_date.isoformat()
             record['submissionSubDate'] = submission.date_submitted.isoformat()
+            record['submissionTitle'] = submission.title
             
             # Add information to the record about comments on the submission
             record['submissionComments'] = []
@@ -196,7 +199,7 @@ def state_data(request):
             record['deliverablePlan'] = deliverable.delivery_plan
             record['deliverableCategory'] = CATEGORIES.get(deliverable.category)
             
-            record['submissionFile'] = 'No submissions yet...'
+            record['submissionTitle'] = 'No submissions yet...'
             
             records.append(record)
             

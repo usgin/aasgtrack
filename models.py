@@ -160,6 +160,7 @@ class Submission(models.Model):
     status = models.CharField(max_length=50, choices=SUBMISSION_STATUS)
     date_submitted = models.DateField()
     status_date = models.DateField(null=True, blank=True)
+    title = models.CharField(max_length=255, help_text='A title or human-readable label for this submission.')
     file_name = models.CharField(max_length=255)
     satisfies_deliverable = models.ManyToManyField('Deliverable', verbose_name='Deliverables')
     service_url = models.URLField( blank=True, verbose_name='Service URL', help_text='If this submission is available as an online service, enter the URL for the service\'s GetCapabilities document.')

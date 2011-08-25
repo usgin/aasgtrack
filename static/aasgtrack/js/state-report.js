@@ -44,12 +44,18 @@ function makeMainGridPanel() {
 		    {name: 'submissionStatus'},
 		    {name: 'submissionStatDate', type: 'date', dateFormat: 'Y-m-d'},
 		    {name: 'submissionSubDate', type: 'date', dateFormat: 'Y-m-d'},
-		    {name: 'submissionComments'}
+		    {name: 'submissionComments'},
+		    {name: 'submissionTitle'}
 		]
 	});
 	
 	// Create a #@$!!&^-ing template for the expander
-	var thisTpl = new Ext.XTemplate('<p>Comments:</p>', '<tpl for="submissionComments">', '<p>{.}</p>', '</tpl>');
+	var thisTpl = new Ext.XTemplate('<p style="padding-left:10px;"><span style="font-weight: bold;">File Name:</span> {submissionFile}',
+									'<p style="padding-left:10px; font-weight: bold;">Comments:</p>', 
+									'<tpl for="submissionComments">', 
+									'<p style="padding-left:15px;"> -- {.}</p>', 
+									'</tpl>'
+	);
 	
 	// Create the rowExpander for comments
 	var expander = new Ext.ux.grid.RowExpander({
@@ -79,7 +85,8 @@ function makeMainGridPanel() {
 		columns: [
 		    expander,
 		    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
-		    {id: 'submissionFile', header: 'Submitted File', sortable: true, dataIndex: 'submissionFile'},
+		    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle'},
+		    //{id: 'submissionFile', header: 'File Name', sortable: true, dataIndex: 'submissionFile'},
 		    {id: 'submissionSubDate', header: 'Submitted On', sortable: true, dataIndex: 'submissionSubDate', renderer: Ext.util.Format.dateRenderer('M j, Y')},
 		    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}		
 		],
@@ -88,7 +95,7 @@ function makeMainGridPanel() {
 			groupTextTpl: '{[ values.rs[0].data["deliverableYear"] ]} {text} ({[ values.rs[0].data["deliverableCategory"] ]})',
 			hideGroupedColumn: true,
 			enableNoGroups: false,
-			enableGroupingMenu: false
+			enableGroupingMenu: false,
 		}),
 		plugins: expander
 	});
