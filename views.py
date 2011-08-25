@@ -175,13 +175,6 @@ def map_scripts(request, js_file_name):
         
     return render_to_response("aasgtrack/map/js/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
 
-def tempo(request):
-    additional_context = {}
-    for cat in CATEGORIES:
-        additional_context[cat] = build_color_scheme(cat)
-    
-    return HttpResponse(json.dumps(additional_context), mimetype='application/json')
-
 def admin_scripts(request, js_file_name):
     # Only GET commands are allowed
     valid_requests = ['GET']
