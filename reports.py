@@ -95,7 +95,7 @@ def online_state_data(request):
     if not request.GET: raise Http404('Please provide an appropriate "state" parameter. For example, track/report/data?state=al.')
     state_abbr = request.GET.get('state', 'none')
     state = get_object_or_404(State, abbreviation__iexact=state_abbr)
-    
+        
     # Build a list of records for the GridPanel
     records = []
     downloads = 0
@@ -156,11 +156,19 @@ def state_data(request):
     state_abbr = request.GET.get('state', 'none')
     state = get_object_or_404(State, abbreviation__iexact=state_abbr)
     
+     # Check if a year was specified
+    year = request.GET.get('year')
+    if year: year = int(year)
+    
     # Build a list of records for the GridPanel
     deliverables_with_submissions = []
     records = []
     for submission in state.submission_set.all():
         for deliverable in submission.satisfies_deliverable.all():
+            # Skip this deliverable if it is not of the specified year
+            if year and deliverable.year != year:
+                continue
+            
             if deliverable not in deliverables_with_submissions:
                 deliverables_with_submissions.append(deliverable)
             
@@ -191,6 +199,10 @@ def state_data(request):
     # Should check that all deliverables are represented. Add a blank row for deliverables with no submissions.
     for deliverable in state.deliverable_set.all():
         if deliverable not in deliverables_with_submissions:
+            # Again, skip if it isn't from the specified year
+            if year and deliverable.year != year:
+                continue
+            
             record = { 'state': state.abbreviation }
             record['deliverableId'] =  deliverable.pk
             record['deliverableYear'] = PROJECT_YEARS.get(deliverable.year)
