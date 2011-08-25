@@ -47,7 +47,7 @@ def all_data(request):
                 
             # Count the number of records available online
             recordCount = 0
-            for online_submission in these_submissions.filter(status__in=['onlinget_completion_percente']):
+            for online_submission in these_submissions.filter(status__in=['online']):
                 if online_submission.number_of_records:
                     recordCount = recordCount + online_submission.number_of_records
                     totalRecords = totalRecords + recordCount
