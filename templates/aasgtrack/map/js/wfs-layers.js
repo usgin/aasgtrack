@@ -18,7 +18,7 @@ function wfsPointLayer(name, strategy) {
 					   	type: OpenLayers.Filter.Comparison.NOT_EQUAL_TO,
 					   	property: "category",
 					 	value: "all"
-					 }),
+					 })
 	});
 	
 	if (strategy) { filterStrategy = strategy };	
@@ -41,7 +41,7 @@ function wfsCenterPointLayer(name, strategy, useLabels, labelString) {
 					   	type: OpenLayers.Filter.Comparison.EQUAL_TO,
 					   	property: "category",
 					 	value: "all"
-					 }),
+					 })
 	});
 	
 	if (strategy) { filterStrategy = strategy };

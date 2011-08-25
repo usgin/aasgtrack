@@ -49,7 +49,7 @@ Ext.onReady(function() {
 	// Make a Title/Header
 	var topPanel = new Ext.BoxComponent({
 		autoEl: {
-			html: '<a href="http://stategeothermaldata.org"><img src="' + headImgUrl + '"></img></a>', //defined in state-report.html template
+			html: '<a href="http://stategeothermaldata.org"><img src="' + headImgUrl + '"></img></a>' //defined in state-report.html template
 		},
 		style: 'padding-top: 6px; padding-left: 25px;',
 		region: 'north',

@@ -32,7 +32,7 @@ function buildPopup(state, category, feature, map) {
 				maximizable: false,
 				collapsible: false,
 				panIn: false,
-				anchored: false,	
+				anchored: false	
 			};
 			
 			if (map != null) 
@@ -75,17 +75,15 @@ function clickResponse(feature, map) {
 	}
 	else if (state != "ALL") {
 		// Clicked on a particular state. Popup!
-		buildPopup(state, category, feature, map);
-		
+		buildPopup(state, category, feature, map);	
 	}
-	
 }
 
 function buildClickControl() {
 	theClicker = new OpenLayers.Control.GetFeature({
 		protocol: buildWfsProtocol(),
 		clickTolerance: 12,
-		maxFeatures: 1,
+		maxFeatures: 1
 	});
 	
 	theClicker.events.register("featureselected", this, function(e) {
