@@ -80,7 +80,7 @@ function buildMapPanels(maps) {
 	var marginValue = 10;                     
 	var alaskaHeight = 200;
 	var hawaiiHeight = 125;
-	var mapWidth = 1024;
+	var mapWidth = 984;
 	var titleWidth = 450;
 	
 	// Build the map panels

@@ -46,10 +46,13 @@ function init() {
         layout: "border",
         renderTo: "map",
         defaults: { autoScroll: true },			    
-        items: [ { layout: "absolute",
-        		   region: "center",
-        		   items: panels
-        		}
-        	   ]
-        });
+        items: [ 
+                 { 
+                	 layout: "absolute",
+                	 region: "center",
+                	 items: panels,
+                	 bodyStyle: 'border: none;'
+        		 }
+        ], 	  
+	});
 };
