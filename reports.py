@@ -125,7 +125,7 @@ def online_state_data(request):
             record = {'submissionName': submission.file_name }
             record['urlType'] = 'Downloads'
             record['url'] = submission.download_url
-            record['label'] = '<a href="' + submission.service_url + '">' + submission.title + '</a>'
+            record['label'] = '<a href="' + submission.download_url + '">' + submission.title + '</a>'
             
             record['deliverables'] = deliverables
             
