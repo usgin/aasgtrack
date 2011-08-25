@@ -2,16 +2,8 @@
 // Global variables are set from database content
 //  The global variable is a dictionary of dictionaries:
 //  dict( key=category code, value = dict( key=state abbreviation, value=symbol element for fillColor ) )
-var g_stateThemes = {
-		'temp': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ temp|get:state.abbreviation }}" },{% endfor %} },
-		'wchem': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ wchem|get:state.abbreviation }}" },{% endfor %} },
-		'tect': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ tect|get:state.abbreviation }}" },{% endfor %} },
-		'other': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ other|get:state.abbreviation }}" },{% endfor %} },
-		'meta': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ meta|get:state.abbreviation }}" },{% endfor %} },
-		'map': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ map|get:state.abbreviation }}" },{% endfor %} },
-		'well': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ well|get:state.abbreviation }}" },{% endfor %} },
-		'rchem': { {% for state in states %}"{{ state.abbreviation }}": { fillColor: "{{ rchem|get:state.abbreviation }}" },{% endfor %} }
-};
+
+var g_stateThemes = {{ colors|safe }};
 
 function buildStateStyleMap(category) {
 	// Given a category, build an OpenLayers.StyleMap with appropriate styling rules based on database content

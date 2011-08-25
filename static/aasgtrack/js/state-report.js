@@ -250,7 +250,7 @@ function makeMapPanel() {
 	});
 }
 
-Ext.onReady(function() {	
+function init() {	
 	// Make a side-panel
 	var rightPanel = new Ext.Panel({
 		region: 'east',
@@ -296,4 +296,4 @@ Ext.onReady(function() {
 		style: 'background: #17293D url(' + headerBackUrl + ');'
 	})
     
-});
+};

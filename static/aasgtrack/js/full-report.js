@@ -1,4 +1,4 @@
-Ext.onReady(function() {
+function init() {
 	// Create a loading message
 	var loadMsg = {
 			'showLoading': function() {
@@ -68,4 +68,4 @@ Ext.onReady(function() {
         style: 'background: #17293D url(' + headerBackUrl + ');'
 	})
     
-});
+};

@@ -10,7 +10,7 @@ function changeWfsStyle(category) {
 	}
 }
 		
-Ext.onReady(function() {
+function init() {
 	OpenLayers.ProxyHost = 'proxy?url=';
 	
 	// Build all the OpenLayers.Maps -- function defined in map-builder.js
@@ -52,4 +52,4 @@ Ext.onReady(function() {
         		}
         	   ]
         });
-});
+};

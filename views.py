@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from models import State, Deliverable, Submission, SubmissionComment, CATEGORIES, STATUS
 from colorsys import hsv_to_rgb
-import urllib2
+import urllib2, json
 
 VALID_CONTEXTS = ['full', 'popup']
 
@@ -140,22 +140,21 @@ def build_color_scheme(category):
         
         # Determine which symbology bin it belongs in
         if 0 <= complete < 20:
-            scheme[a_state.abbreviation] = ramp[4]
+            scheme[a_state.abbreviation] = {'fillColor': ramp[4]}
         elif 20 <= complete < 40:
-            scheme[a_state.abbreviation] = ramp[3]
+            scheme[a_state.abbreviation] = {'fillColor': ramp[3]}
         elif 40 <= complete < 60:
-            scheme[a_state.abbreviation] = ramp[2]
+            scheme[a_state.abbreviation] = {'fillColor': ramp[2]}
         elif 60 <= complete < 80:
-            scheme[a_state.abbreviation] = ramp[1]
+            scheme[a_state.abbreviation] = {'fillColor': ramp[1]}
         elif 80 <= complete <= 100:
-            scheme[a_state.abbreviation] = ramp[0]
+            scheme[a_state.abbreviation] = {'fillColor': ramp[0]}
         else:
-            scheme[a_state.abbreviation] = '#BFBFBF'
+            scheme[a_state.abbreviation] = {'fillColor': '#BFBFBF'}
     
     # Return the result
     return scheme
     
-
 def map_scripts(request, js_file_name):
     # Only GET commands are allowed
     valid_requests = ['GET']
@@ -169,10 +168,19 @@ def map_scripts(request, js_file_name):
         for cat in CATEGORIES:
             additional_context[cat] = build_color_scheme(cat)
         
-        # Add another context variable for the roor colors
+        additional_context['colors'] = json.dumps(additional_context)
+        
+        # Add another context variable for the root colors
         additional_context['root_colors'] = root_hex_colors
         
     return render_to_response("aasgtrack/map/js/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
+
+def tempo(request):
+    additional_context = {}
+    for cat in CATEGORIES:
+        additional_context[cat] = build_color_scheme(cat)
+    
+    return HttpResponse(json.dumps(additional_context), mimetype='application/json')
 
 def admin_scripts(request, js_file_name):
     # Only GET commands are allowed
