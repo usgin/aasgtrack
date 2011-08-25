@@ -55,7 +55,7 @@ function makeMainGridPanel() {
 									'<tpl if="submissionComments!=\'\'">',
 									'<p style="padding-left:25px; font-style: italic;">Comments:</p>', 
 									'<tpl for="submissionComments">', 
-									'<p style="padding-left:30px;"> -- {.}</p>', 
+									'<p style="padding-left:55px; text-indent: -20px;">  - {.}</p>', 
 									'</tpl>',
 									'</tpl>'
 	);
