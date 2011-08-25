@@ -16,6 +16,7 @@ function makeSummaryGridPanel() {
 	var grid = new Ext.grid.GridPanel({
 		store: store,
 		frame: true,
+		enableColumnHide: false,
 		title: summaryTitle, //defined in state-report.html
 		region: 'north',
 		columns: metricsColumns, // defined in metrics-data.js
@@ -74,6 +75,7 @@ function makeMainGridPanel() {
 		title: subTitle, // defined in state-report.html template
 		region: 'center',
 		frame: true,
+		enableColumnHide: false,
 		columns: [
 		    expander,
 		    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
@@ -83,7 +85,10 @@ function makeMainGridPanel() {
 		],
 		view: new Ext.grid.GroupingView({
 			forceFit: true,
-			groupTextTpl: '{[ values.rs[0].data["deliverableYear"] ]} {text} ({[ values.rs[0].data["deliverableCategory"] ]})'
+			groupTextTpl: '{[ values.rs[0].data["deliverableYear"] ]} {text} ({[ values.rs[0].data["deliverableCategory"] ]})',
+			hideGroupedColumn: true,
+			enableNoGroups: false,
+			enableGroupingMenu: false
 		}),
 		plugins: expander
 	});
