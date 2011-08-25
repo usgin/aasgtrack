@@ -57,10 +57,7 @@ function makeMainGridPanel() {
 									'<p style="padding-left:30px;"> -- {.}</p>', 
 									'</tpl>'
 	);
-	
-	// Create another template for the Grouper
-	var otherTpl = new Ext.XTemplate('{gvalue}');
-	
+		
 	// Create Four data stores, one for each project year. Load them.
 	// Generate GridPanels within the same loop
 	stores = [];
@@ -85,15 +82,13 @@ function makeMainGridPanel() {
 			frame: true,
 			columns: [
 			    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
-			    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle', css: 'font-weight: bold;'},
+			    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle', css: 'font-weight: bold; font-size: 12px;'},
 			    {id: 'submissionSubDate', header: 'Submitted On', sortable: true, dataIndex: 'submissionSubDate', renderer: Ext.util.Format.dateRenderer('M j, Y')},
 			    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}		
 			],
 			view: new Ext.grid.GroupingView({
 				forceFit: true,
-				//groupTextTpl: '{[ values.rs[0].data["deliverableName"] ]} ({[ values.rs[0].data["deliverableCategory"] ]})',
 				groupTextTpl: '{gvalue}',
-				//groupTextTpl: otherTpl,
 				hideGroupedColumn: true,
 				enableNoGroups: false,
 				enableGroupingMenu: false,
@@ -130,35 +125,6 @@ function makeMainGridPanel() {
 	});
 	
 	return accordion;
-	
-	// Make the Data Grid
-	//var grid = new Ext.grid.GridPanel({
-	//	store: store,
-		//frame: true,
-	//	margins: '5 0 0 0',
-	//	title: subTitle, // defined in state-report.html template
-	//	region: 'center',
-	//	frame: true,
-	//	enableColumnHide: false,
-	//	columns: [
-	//	    expander,
-	//	    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
-	//	    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle'},
-	//	    //{id: 'submissionFile', header: 'File Name', sortable: true, dataIndex: 'submissionFile'},
-	//	    {id: 'submissionSubDate', header: 'Submitted On', sortable: true, dataIndex: 'submissionSubDate', renderer: Ext.util.Format.dateRenderer('M j, Y')},
-	//	    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}		
-	//	],
-	//	view: new Ext.grid.GroupingView({
-	//		forceFit: true,
-	//		groupTextTpl: '{[ values.rs[0].data["deliverableYear"] ]} {text} ({[ values.rs[0].data["deliverableCategory"] ]})',
-	//		hideGroupedColumn: true,
-	//		enableNoGroups: false,
-	//		enableGroupingMenu: false,
-	//	}),
-	//	plugins: expander
-	//});
-	
-	//return grid;
 }
 
 function makeOnlineGridPanel() {
@@ -176,7 +142,6 @@ function makeOnlineGridPanel() {
 	});
 	
 	// Create the grouping data store
-	//  store.on defines a function to call when loading is complete
 	var store = new Ext.data.GroupingStore({
 		reader: reader,
 		url: theOnlineUrl, //defined in state-report.html template

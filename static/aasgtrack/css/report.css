@@ -1,6 +1,11 @@
 .summary-row {
-	background: lightGrey;
+	background: #EDF3FA;
 }
+
+.summary-row table tbody tr td {
+	font-weight: bold;
+}
+
 .submission-row {
 	background: #EDF3FA;
 }
