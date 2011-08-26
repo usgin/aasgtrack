@@ -177,7 +177,7 @@ def state_data(request):
             record = { 'state': state.abbreviation }
             record['deliverableId'] =  deliverable.pk
             record['deliverableYear'] = PROJECT_YEARS.get(deliverable.year)
-            record['deliverableName'] = deliverable.data_item
+            record['deliverableName'] = deliverable.category + '|' + deliverable.data_item
             record['deliverableDef'] = deliverable.definition
             record['deliverablePlan'] = deliverable.delivery_plan
             record['deliverableCategory'] = CATEGORIES.get(deliverable.category)
@@ -207,7 +207,7 @@ def state_data(request):
             record = { 'state': state.abbreviation }
             record['deliverableId'] =  deliverable.pk
             record['deliverableYear'] = PROJECT_YEARS.get(deliverable.year)
-            record['deliverableName'] = deliverable.data_item
+            record['deliverableName'] = deliverable.category + '|' + deliverable.data_item
             record['deliverableDef'] = deliverable.definition
             record['deliverablePlan'] = deliverable.delivery_plan
             record['deliverableCategory'] = CATEGORIES.get(deliverable.category)
@@ -220,7 +220,7 @@ def state_data(request):
     # Generate dummy records if there is nothing to show
     if len(records) == 0:
         record = { 'state': state.abbreviation }
-        record['deliverableName'] = 'No contracted deliverables yet...'
+        record['deliverableName'] = '|No contracted deliverables yet...'
         record['noExpansion'] = True
         records.append(record)
         

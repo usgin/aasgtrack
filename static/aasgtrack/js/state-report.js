@@ -83,14 +83,15 @@ function makeMainGridPanel() {
 			enableColumnHide: false,
 			frame: true,
 			columns: [
+	          	{id: 'deliverableCategory', header: 'Content Category', sortable: true, dataIndex: 'deliverableCategory', hidden: true },
 			    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
 			    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle', css: 'font-weight: bold;'},
 			    {id: 'submissionSubDate', header: 'Submitted On', sortable: true, dataIndex: 'submissionSubDate', renderer: Ext.util.Format.dateRenderer('M j, Y')},
-			    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}		
+			    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}
 			],
 			view: new Ext.grid.GroupingView({
-				forceFit: true,
-				groupTextTpl: '{gvalue} <tpl if="rs[0].data[\'deliverableCategory\']">({[ values.rs[0].data[\'deliverableCategory\'] ]})</tpl>',
+				forceFit: true,				
+				groupTextTpl: '{[ values.rs[0].data[\'deliverableName\'].split(\'|\')[1] ]} <tpl if="rs[0].data[\'deliverableCategory\']">({[ values.rs[0].data[\'deliverableCategory\'] ]})</tpl>',
 				hideGroupedColumn: true,
 				enableNoGroups: false,
 				enableGroupingMenu: false,
