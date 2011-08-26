@@ -23,9 +23,10 @@ def all_data(request):
     grandTotalDeliverables = 0
     
     for this_state in states:
-        totalRecords = 0
         completedDeliverables = 0
         for category in CATEGORIES:
+            totalRecords = 0
+            
             these_deliverables = Deliverable.objects.filter(state=this_state).filter(category=category)
             if len(these_deliverables) == 0: continue
             
