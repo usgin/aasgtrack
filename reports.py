@@ -65,7 +65,7 @@ def all_data(request):
         record['deliverableCount'] = len(this_state.deliverable_set.all())
         record['deliverablesComplete'] = completedDeliverables
         record['completion'] = ( float(completedDeliverables) / len(this_state.deliverable_set.all()) ) * 100
-        record['onlineCount'] = totalRecords
+        record['onlineCount'] = grandTotalRecords
         record['summary'] = True
         
         records.append(record)
