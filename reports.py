@@ -53,7 +53,7 @@ def all_data(request):
                     totalRecords = totalRecords + recordCount
                     grandTotalRecords = grandTotalRecords + recordCount
                     
-            record['onlineCount'] = recordCount
+            record['onlineCount'] = totalRecords
             
             # Add the group-label
             record['groupLabel'] = '<a href="/track/report/' + this_state.abbreviation + '">State: ' + this_state.name + '</a>'
