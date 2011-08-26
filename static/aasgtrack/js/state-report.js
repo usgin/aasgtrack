@@ -59,7 +59,7 @@ function makeMainGridPanel() {
 									'</tpl>',
 									'</tpl>'
 	);
-		
+	
 	// Create Four data stores, one for each project year. Load them.
 	// Generate GridPanels within the same loop
 	stores = [];
@@ -90,7 +90,7 @@ function makeMainGridPanel() {
 			],
 			view: new Ext.grid.GroupingView({
 				forceFit: true,
-				groupTextTpl: '{gvalue}',
+				groupTextTpl: '{gvalue} <tpl if="rs[0].data[\'deliverableCategory\']">({[ values.rs[0].data[\'deliverableCategory\'] ]})</tpl>',
 				hideGroupedColumn: true,
 				enableNoGroups: false,
 				enableGroupingMenu: false,
