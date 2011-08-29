@@ -23,9 +23,12 @@ def all_data(request):
     grandTotalDeliverables = 0
     
     for this_state in states:
-        completedDeliverables = 0
+        stateCompletedDeliverables = 0
+        stateTotalRecords = 0
+        
         for category in CATEGORIES:
-            totalRecords = 0
+            categoryRecordCount = 0
+            categoryCompletedDeliverables = 0
             
             these_deliverables = Deliverable.objects.filter(state=this_state).filter(category=category)
             if len(these_deliverables) == 0: continue
@@ -37,7 +40,8 @@ def all_data(request):
             
             satisfied, total = completed_deliverables(this_state, category)
             record['deliverablesComplete'] = satisfied
-            completedDeliverables = completedDeliverables + satisfied
+            categoryCompletedDeliverables = categoryCompletedDeliverables + satisfied
+            stateCompletedDeliverables = stateCompletedDeliverables + satisfied
             grandTotalDeliverables = grandTotalDeliverables + satisfied
             
             record['completion'] = get_completion_percent(satisfied, total)
@@ -47,14 +51,14 @@ def all_data(request):
                 record['recentSubmission'] = 'None'
                 
             # Count the number of records available online
-            recordCount = 0
+            
             for online_submission in these_submissions.filter(status__in=['online']):
                 if online_submission.number_of_records:
-                    recordCount = recordCount + online_submission.number_of_records
-                    totalRecords = totalRecords + recordCount
-                    grandTotalRecords = grandTotalRecords + recordCount
+                    categoryRecordCount = categoryRecordCount + online_submission.number_of_records
+                    stateTotalRecords = stateTotalRecords + categoryRecordCount
+                    grandTotalRecords = grandTotalRecords + categoryRecordCount
                     
-            record['onlineCount'] = totalRecords
+            record['onlineCount'] = categoryRecordCount
             
             # Add the group-label
             record['groupLabel'] = '<a href="/track/report/' + this_state.abbreviation + '">State: ' + this_state.name + '</a>'
@@ -63,9 +67,9 @@ def all_data(request):
         # Create a "summary" record for this state
         record = { 'state': this_state.abbreviation, 'state_name': this_state.name, 'category': 'Totals for ' + this_state.name }
         record['deliverableCount'] = len(this_state.deliverable_set.all())
-        record['deliverablesComplete'] = completedDeliverables
-        record['completion'] = ( float(completedDeliverables) / len(this_state.deliverable_set.all()) ) * 100
-        record['onlineCount'] = grandTotalRecords
+        record['deliverablesComplete'] = stateCompletedDeliverables
+        record['completion'] = ( float(stateCompletedDeliverables) / len(this_state.deliverable_set.all()) ) * 100
+        record['onlineCount'] = stateTotalRecords
         record['summary'] = True
         
         records.append(record)
