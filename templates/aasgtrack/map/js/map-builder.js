@@ -72,7 +72,7 @@ function addHoverEvent(maps) {
 
 function buildMapPanels(maps) {
 	// Setup center coordinates for each map				
-	var continentalCenterPoint = new OpenLayers.LonLat(-10691131, 4705637);
+	var continentalCenterPoint = new OpenLayers.LonLat(-10691131, 4305637);
 	var alaskaCenterPoint = new OpenLayers.LonLat(-16793594, 9376849);
 	var hawaiiCenterPoint = new OpenLayers.LonLat(-17532836, 2356488);
 	
@@ -87,7 +87,7 @@ function buildMapPanels(maps) {
 	var continentalMapPanel = new GeoExt.MapPanel({	
         map: maps['continental'],
         center: continentalCenterPoint,
-        height: 768,
+        height: 618,
         width: mapWidth,
         x: 0,
         y: 0,
@@ -114,26 +114,7 @@ function buildMapPanels(maps) {
     	bodyStyle: { border: "1px solid black" }
     });
     
-    // Add a title Panel
-    currentTime = new Date();
-    month = currentTime.getMonth() + 1;
-    day = currentTime.getDate();
-    year = currentTime.getFullYear();
-    
-    today = month + "/" + day + "/" + year;
-    
-    titlePanel = new Ext.Panel({
-		width: titleWidth,
-		x: ( mapWidth - titleWidth ) / 2,
-		y: 15,
-		html: "<div style='text-align: center;'><h1 style='font-size: 21px;'>State Geothermal Data Contribution Status<br />by Data Theme</h1><p>" + today + "</p></div>",
-		bodyStyle: { 
-			border: "1px solid black",
-			padding: "15px"
-		}			
-	});
-    
     // Return a list of panels
-    var panelList = [ continentalMapPanel, alaskaMapPanel, hawaiiMapPanel, titlePanel ];
+    var panelList = [ continentalMapPanel, alaskaMapPanel, hawaiiMapPanel ];
 	return panelList;
 }
