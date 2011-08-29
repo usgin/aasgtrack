@@ -2,12 +2,17 @@
 var g_stateLayers = {};
 var g_pointLayers = {};
 var g_maps = {};
+var panels;
 
-function changeWfsStyle(category) {
+function changeWfsStyle(category) {	
+	// Change the state's colors
 	for (layer in g_stateLayers) {
 		g_stateLayers[layer].styleMap = buildStateStyleMap(category);
 		g_stateLayers[layer].redraw();
 	}
+	
+	// Change the legend panel
+	panels[panels.length - 1].body.applyStyles({ background: 'url("{{ static_url }}aasgtrack/img/' + category + '-legend.png")' });
 }
 		
 function init() {

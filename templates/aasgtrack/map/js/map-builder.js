@@ -82,6 +82,7 @@ function buildMapPanels(maps) {
 	var hawaiiHeight = 125;
 	var mapWidth = 984;
 	var titleWidth = 450;
+	var legendHeight = 281;
 	
 	// Build the map panels
 	var continentalMapPanel = new GeoExt.MapPanel({	
@@ -114,7 +115,18 @@ function buildMapPanels(maps) {
     	bodyStyle: { border: "1px solid black" }
     });
     
+    // Build a legendPanel
+    var legendPanel = new Ext.Panel({
+    	id: 'legend-panel',
+    	bodyStyle: { border: 'none', background: 'none'},
+    	height: legendHeight,
+    	width: 72,
+    	x: mapWidth - 100,
+    	y: continentalMapPanel.height - legendHeight - 60,
+    	bodyStyle: { background: 'none', border: 'none'}
+    });
+    
     // Return a list of panels
-    var panelList = [ continentalMapPanel, alaskaMapPanel, hawaiiMapPanel ];
+    var panelList = [ continentalMapPanel, alaskaMapPanel, hawaiiMapPanel, legendPanel ];
 	return panelList;
 }
