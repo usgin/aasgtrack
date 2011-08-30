@@ -67,7 +67,6 @@ function clickResponse(feature, map) {
 	var category = feature.attributes["category"];
 	var state = feature.attributes["state"];
 	
-	//alert("State: " + state + " -- Category: "+ category);
 	if (state == "ALL" && category != "all") {
 		// Clicked a label point. Update the state display
 		category = feature.attributes["category"];

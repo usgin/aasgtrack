@@ -29,12 +29,25 @@ function addLayers(maps) {
 		// Layer-building functions defined in wfs-layers.js and wms-layers.js
 		thisMap.addLayer(wmsBackgroundLayer(index + "BackgroundLayer"));
 		thisMap.addLayer(wfsStateLayer(index + "StateLayer"));
-		//thisMap.addLayer(wmsStateLayer(index + "StateLayer"));
-		thisMap.addLayer(wmsLeaderLayer());
+		thisMap.addLayer(buildLabelLayer());
 		thisMap.addLayer(wfsPointLayer(index + "PointLayer"));
-		thisMap.addLayer(wfsCenterPointLayer(index + "CenterLayer"));
-		thisMap.addLayer(wmsPointLayer(index + "LabelLayer"));
+		thisMap.addLayer(wfsCenterPointLayer(index + "CenterLayer", null, true, '${state}'));
 	}
+}
+
+function buildLabelLayer() {
+	layer = new OpenLayers.Layer.Image(
+		"Category Labels",
+		"{{ static_url }}aasgtrack/img/category-labels.png",
+		new OpenLayers.Bounds(-13956281, 2257437, -7425981, 6353837),
+		new OpenLayers.Size(984, 618),
+		{ 
+			isBaseLayer: false,
+			alwaysInRange: true
+		}
+	);
+	
+	return layer;
 }
 
 function addClickEvent(maps) {
@@ -122,8 +135,7 @@ function buildMapPanels(maps) {
     	height: legendHeight,
     	width: 72,
     	x: mapWidth - 100,
-    	y: continentalMapPanel.height - legendHeight - 60,
-    	bodyStyle: { background: 'none', border: 'none'}
+    	y: continentalMapPanel.height - legendHeight - 60
     });
     
     // Return a list of panels
