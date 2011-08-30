@@ -4,7 +4,10 @@ function wmsBackgroundLayer(name) {
 	    "http://50.19.88.63/arcgis/services/WorldBackground/MapServer/WMSServer",
 	    { layers: ["0", "1", "2"], 
 	      format: "image/png" },
-	    { isBackground: true }  
+	    { 
+	    	  isBackground: true,
+	    	  singleTile: true
+	    }  
 	);	
 	
 	return backgroundLayer;

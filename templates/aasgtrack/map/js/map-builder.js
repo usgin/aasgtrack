@@ -27,7 +27,8 @@ function addLayers(maps) {
 		thisMap = maps[index];
 		
 		// Layer-building functions defined in wfs-layers.js and wms-layers.js
-		thisMap.addLayer(wmsBackgroundLayer(index + "BackgroundLayer"));
+		//thisMap.addLayer(wmsBackgroundLayer(index + "BackgroundLayer"));
+		thisMap.addLayer(ags93BackgroundLayer(index + "BackgroundLayer"));
 		thisMap.addLayer(wfsStateLayer(index + "StateLayer"));
 		thisMap.addLayer(buildLabelLayer());
 		thisMap.addLayer(wfsPointLayer(index + "PointLayer"));
