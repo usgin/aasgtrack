@@ -32,9 +32,21 @@ function addLayers(maps) {
 		//thisMap.addLayer(wmsStateLayer(index + "StateLayer"));
 		thisMap.addLayer(wmsLeaderLayer());
 		thisMap.addLayer(wfsPointLayer(index + "PointLayer"));
-		thisMap.addLayer(wfsCenterPointLayer(index + "CenterLayer"));
-		thisMap.addLayer(wmsPointLayer(index + "LabelLayer"));
+		thisMap.addLayer(wfsCenterPointLayer(index + "CenterLayer", null, true, '${state}'));
+		//thisMap.addLayer(wmsPointLayer(index + "LabelLayer"));
+		thisMap.addLayer(buildLabelLayer());
 	}
+}
+
+function buildLabelLayer() {
+	layer = new OpenLayers.Layer.Image(
+		"Labels",
+		"/{{ static_url }}aasgtrack/img/category-labels.png",
+		null,
+		new OpenLayers.Size(211, 166)
+	);
+	
+	return layer;
 }
 
 function addClickEvent(maps) {
@@ -122,8 +134,16 @@ function buildMapPanels(maps) {
     	height: legendHeight,
     	width: 72,
     	x: mapWidth - 100,
-    	y: continentalMapPanel.height - legendHeight - 60,
-    	bodyStyle: { background: 'none', border: 'none'}
+    	y: continentalMapPanel.height - legendHeight - 60
+    });
+    
+    // Panel for the legend Labels
+    var labelPanel = new Ext.Panel({
+    	bodyStyle: { border: 'none', background: 'url("{{ static_url }}aasgtrack/img/category-labels.png")'},
+    	height: 166,
+    	width: 211,
+    	x: mapWidth - 500,
+    	y: continentalMapPanel.height - 166
     });
     
     // Return a list of panels
