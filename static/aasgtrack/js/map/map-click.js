@@ -1,5 +1,3 @@
-{% load filters %}
-var categories = {};{% for cat in category_codes %}categories["{{ cat }}"] = "{{ category_codes|get:cat }}";{% endfor %}
 var popup;
 
 function buildPopup(state, category, feature, map) {

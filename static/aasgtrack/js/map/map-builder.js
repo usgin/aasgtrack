@@ -39,7 +39,7 @@ function addLayers(maps) {
 function buildLabelLayer() {
 	layer = new OpenLayers.Layer.Image(
 		"Category Labels",
-		"{{ static_url }}aasgtrack/img/category-labels.png",
+		categoryLabelUrl,
 		new OpenLayers.Bounds(-13956281, 2257437, -7425981, 6353837),
 		new OpenLayers.Size(984, 618),
 		{ 

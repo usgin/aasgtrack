@@ -1,7 +1,5 @@
 function buildWfsProtocol() {
 	var thisProtocol = new OpenLayers.Protocol.WFS({
-		  //url: "http://50.19.88.63/ArcGIS/services/StatePoints/MapServer/WFSServer",
-		  //featureType: "State_Points",
 		  srsName: "EPSG:3857",
 		  url: "http://localhost:8080/geoserver/wfs",
 		  featureType: "StatePoints",

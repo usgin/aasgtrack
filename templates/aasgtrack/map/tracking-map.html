@@ -1,11 +1,17 @@
 {% extends "aasgtrack/map/map-base.html" %}
-
+{% load filters %}
 {% block scripts %}
-	<script src="map/js/map.js" type="text/javascript"></script>
-	<script src="map/js/wfs-layers.js" type="text/javascript"></script>
-	<script src="map/js/map-click.js" type="text/javascript"></script>
-	<script src="map/js/wms-layers.js" type="text/javascript"></script>
-	<script src="map/js/ags-layers.js" type="text/javascript"></script>
+	<script src="{{ static_url }}aasgtrack/js/map/map.js" type="text/javascript"></script>
+	<script src="{{ static_url }}aasgtrack/js/map/wfs-layers.js" type="text/javascript"></script>
+	<script src="{{ static_url }}aasgtrack/js/map/map-click.js" type="text/javascript"></script>
+	<script src="{{ static_url }}aasgtrack/js/map/wms-layers.js" type="text/javascript"></script>
+	<script src="{{ static_url }}aasgtrack/js/map/ags-layers.js" type="text/javascript"></script>
+	<script src="{{ static_url }}aasgtrack/js/map/map-builder.js" type="text/javascript"></script>
 	<script src="map/js/map-styles.js" type="text/javascript"></script>
-	<script src="map/js/map-builder.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+		var categoryLabelUrl = "{{ static_url }}aasgtrack/img/category-labels.png";
+		var legendBaseUrl = "{{ static_url }}aasgtrack/img/";
+		var categories = {};{% for cat in category_codes %}categories["{{ cat }}"] = "{{ category_codes|get:cat }}";{% endfor %}
+	</script>
 {% endblock %}

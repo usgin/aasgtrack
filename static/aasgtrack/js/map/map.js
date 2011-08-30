@@ -1,4 +1,3 @@
-{% load filters %}
 var g_stateLayers = {};
 var g_pointLayers = {};
 var g_maps = {};
@@ -12,7 +11,7 @@ function changeWfsStyle(category) {
 	}
 	
 	// Change the legend panel
-	panels[panels.length - 1].body.applyStyles({ background: 'url("{{ static_url }}aasgtrack/img/' + category + '-legend.png")' });
+	panels[panels.length - 1].body.applyStyles({ background: 'url("' + legendBaseUrl + category + '-legend.png")' });
 }
 		
 function init() {
