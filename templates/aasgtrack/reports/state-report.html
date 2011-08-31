@@ -1,4 +1,5 @@
 {% extends "aasgtrack/reports/report-base.html" %}
+{% load filters %}
 {% block links %}
 <link rel="stylesheet" type="text/css" href="{{ static_url }}externals/geoext/build/GeoExt/resources/css/geoext-all.css" />
 {% endblock %}
@@ -81,5 +82,8 @@
 	// Choose the right resolution and initial center for the flowers to be displayed. State-specific
 	var resolution = {% if state.abbreviation == 'AK' %}25650{% endif %}{% if state.abbreviation == 'HI' %}4892{% endif %}{% if state.abbreviation != 'AK' and state.abbreviation != 'HI' %}6650{% endif %};
 	var centerPoint = {% if state.abbreviation == 'AK' %}new OpenLayers.LonLat(-16793594, 9376849){% endif %}{% if state.abbreviation == 'HI' %}new OpenLayers.LonLat(-17532836, 2356488){% endif %}{% if state.abbreviation != 'AK' and state.abbreviation != 'HI' %}new OpenLayers.LonLat(-10691131, 4705637){% endif %};
+	
+	// Variable for decodeing categories
+	var categories = {};{% for cat in category_codes %}categories["{{ cat }}"] = "{{ category_codes|get:cat }}";{% endfor %}
 </script>
 {% endblock %}
