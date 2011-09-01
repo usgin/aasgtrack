@@ -1,13 +1,13 @@
 {% load filters %}
 <div id="popup-container" style="text-align: center;">
-	<div id="deliverable-title" style="border-bottom: 1px solid #AAAAAA; padding: 3px;">
-		<p style="font-style: italic;">Year-One Data-Items{% if percent %}: {{ percent }}% Complete{% endif %}</p>
+	<div id="deliverable-1-title" style="border-bottom: 1px solid #AAAAAA; padding: 3px;">
+		<p style="font-style: italic;">Year-One Data-Items</p>
 	</div>
-	<div id="deliverable-container" style="background-color: white; width: 100%; border-bottom: 1px solid #AAAAAA; padding: 3px;">
-		{% if deliverables|length > 0 %}
-			<table style="width: 100%;">
+	<div id="deliverable-1-container" style="background-color: white; width: 100%; border-bottom: 1px solid #AAAAAA; padding: 3px;">
+		{% if deliv_1|length > 0 %}
+			<table style="width: 100%; font-size: 11px;">
 				<tb>
-					{% for deliv in deliverables %}
+					{% for deliv in deliv_1 %}
 						<tr>
 							<td style="text-align: center; font-weight: bold;">{{ deliv.data_item }} 
 								<br />
@@ -21,7 +21,63 @@
 			<p>None Yet!</p>
 		{% endif %}
 	</div>
-
+	{% if deliv_2|length > 0 %}
+	<div id="deliverable-2-title" style="border-bottom: 1px solid #AAAAAA; padding: 3px;">
+		<p style="font-style: italic;">Year-Two Data-Items</p>
+	</div>
+	<div id="deliverable-2-container" style="background-color: white; width: 100%; border-bottom: 1px solid #AAAAAA; padding: 3px;">		
+			<table style="width: 100%;  font-size: 11px;">
+				<tb>
+					{% for deliv in deliv_2 %}
+						<tr>
+							<td style="text-align: center; font-weight: bold;">{{ deliv.data_item }} 
+								<br />
+								<span style="font-style: italic; font-weight: normal;">{% if deliv.is_satisfied %}Approved{% else %}in Progress{% endif %}</span>
+							</td>								
+						</tr>
+					{% endfor %}
+				</tb>
+			</table>
+	</div>
+	{% endif %}
+	{% if deliv_3|length > 0 %}
+	<div id="deliverable-3-title" style="border-bottom: 1px solid #AAAAAA; padding: 3px;">
+		<p style="font-style: italic;">Year-Three Data-Items</p>
+	</div>
+	<div id="deliverable-3-container" style="background-color: white; width: 100%; border-bottom: 1px solid #AAAAAA; padding: 3px;">		
+			<table style="width: 100%;  font-size: 11px;">
+				<tb>
+					{% for deliv in deliv_3 %}
+						<tr>
+							<td style="text-align: center; font-weight: bold;">{{ deliv.data_item }} 
+								<br />
+								<span style="font-style: italic; font-weight: normal;">{% if deliv.is_satisfied %}Approved{% else %}in Progress{% endif %}</span>
+							</td>								
+						</tr>
+					{% endfor %}
+				</tb>
+			</table>
+	</div>
+	{% endif %}
+	{% if deliv_4|length > 0 %}
+	<div id="deliverable-4-title" style="border-bottom: 1px solid #AAAAAA; padding: 3px;">
+		<p style="font-style: italic;">Supplemental Data-Items</p>
+	</div>
+	<div id="deliverable-4-container" style="background-color: white; width: 100%; border-bottom: 1px solid #AAAAAA; padding: 3px;">		
+			<table style="width: 100%;  font-size: 11px;">
+				<tb>
+					{% for deliv in deliv_4 %}
+						<tr>
+							<td style="text-align: center; font-weight: bold;">{{ deliv.data_item }} 
+								<br />
+								<span style="font-style: italic; font-weight: normal;">{% if deliv.is_satisfied %}Approved{% else %}in Progress{% endif %}</span>
+							</td>								
+						</tr>
+					{% endfor %}
+				</tb>
+			</table>
+	</div>
+	{% endif %}
 	{% if submissions|length > 0 %}
 		<div id="recent-submission-title" style="border-bottom: 1px solid #AAAAAA; padding: 3px;">
 			<p style="font-style: italic;">Most Recent Submission</p>
