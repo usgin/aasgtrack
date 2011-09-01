@@ -1,8 +1,4 @@
 {% load filters %}
-// Global variables are set from database content
-//  The global variable is a dictionary of dictionaries:
-//  dict( key=category code, value = dict( key=state abbreviation, value=symbol element for fillColor ) )
-
 var g_stateThemes = {{ colors|safe }};
 
 function buildStateStyleMap(category) {

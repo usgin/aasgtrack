@@ -54,11 +54,11 @@ def completed_deliverables(state, category):
     else:
         categorized_deliverables = state.deliverable_set.filter(category=category)
         
-    deliverable_count = len(categorized_deliverables)
+    deliverable_count = categorized_deliverables.count()
     if deliverable_count == 0: return None, None
     
     online_deliverables = categorized_deliverables.filter(submission__status__in=['online', 'approved']).distinct()
-    satisfied_deliverables = len(online_deliverables)
+    satisfied_deliverables = online_deliverables.count()
     
     return satisfied_deliverables, deliverable_count
 

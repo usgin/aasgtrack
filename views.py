@@ -7,48 +7,8 @@ from colorsys import hsv_to_rgb
 import urllib2, json
 
 VALID_CONTEXTS = ['full', 'popup']
-
-root_colors = {
-   'temp': 0, 
-   'wchem': float(45) / 360,
-   'tect': float(90) / 360,
-   'other': float(135) / 360,
-   'meta': float(180) / 360,
-   'map': float(225) / 360,
-   'well': float(270) / 360,
-   'rchem': float(315) / 360
-}
-
-def rgb_to_hex(r,g,b):
-    hexchars = "0123456789ABCDEF"
-    return "#" + hexchars[r / 16] + hexchars[r % 16] + hexchars[g / 16] + hexchars[g % 16] + hexchars[b / 16] + hexchars[b % 16]
-
-def category_color_ramp(category):
-    # Build HSV color ramp
-    hsv_color_ramp = []
-    for index in [0, 1, 2, 3, 4]:
-        hsv_color_ramp.append( ( root_colors[category], 1 - .18 * index, 1 ) )
-    
-    # Convert to RGB color ramp
-    rgb_color_ramp = []
-    for index in [0, 1, 2, 3, 4]:
-        hsv_color = hsv_color_ramp[index]
-        rgb_color_ramp.append( hsv_to_rgb( hsv_color[0], hsv_color[1], hsv_color[2] ) )
-    
-    # Convert to HEX color ramp
-    hex_color_ramp = []
-    for index in [0, 1, 2, 3, 4]:
-        rgb_color = rgb_color_ramp[index]
-        hex_color_ramp.append( rgb_to_hex( int(round(255*rgb_color[0])), int(round(255*rgb_color[1])), int(round(255*rgb_color[2])) ) )
-    
-    # Return the color ramp
-    return hex_color_ramp
-
-hex_color_ramps = {}
-root_hex_colors = {}
-for category in CATEGORIES:
-    hex_color_ramps[category] = category_color_ramp(category)
-    root_hex_colors[category] = hex_color_ramps[category][0]
+HEX_COLOR_RAMPS = {'map': ['#0040FF', '#2E62FF', '#5C85FF', '#8AA7FF', '#B8C9FF'], 'temp': ['#FF0000', '#FF2E2E', '#FF5C5C', '#FF8A8A', '#FFB8B8'], 'tect': ['#80FF00', '#96FF2E', '#ADFF5C', '#C4FF8A', '#DBFFB8'], 'wchem': ['#FFBF00', '#FFCB2E', '#FFD65C', '#FFE28A', '#FFEDB8'], 'well': ['#8000FF', '#962EFF', '#AD5CFF', '#C48AFF', '#DBB8FF'], 'rchem': ['#FF00BF', '#FF2ECB', '#FF5CD6', '#FF8AE2', '#FFB8ED'], 'other': ['#00FF40', '#2EFF62', '#5CFF85', '#8AFFA7', '#B8FFC9'], 'meta': ['#00FFFF', '#2EFFFF', '#5CFFFF', '#8AFFFF', '#B8FFFF']}
+ROOT_HEX_COLORS = {'map': '#0040FF', 'temp': '#FF0000', 'tect': '#80FF00', 'wchem': '#FFBF00', 'well': '#8000FF', 'rchem': '#FF00BF', 'other': '#00FF40', 'meta': '#00FFFF'}
     
 def standard_context(additionals):
     context = {'media_url': settings.MEDIA_URL,
@@ -131,7 +91,7 @@ def progress_map(request):
 def build_color_scheme(category):
     scheme = {}
     #ramp = category_color_ramp(category)
-    ramp = hex_color_ramps[category]
+    ramp = HEX_COLOR_RAMPS[category]
     
     # Loop through States
     for a_state in State.objects.exclude(abbreviation='DC'):
@@ -171,7 +131,7 @@ def map_scripts(request, js_file_name):
         additional_context['colors'] = json.dumps(additional_context)
         
         # Add another context variable for the root colors
-        additional_context['root_colors'] = root_hex_colors
+        additional_context['root_colors'] = ROOT_HEX_COLORS
         
     return render_to_response("aasgtrack/map/js/" + js_file_name, standard_context(additional_context), mimetype="text/javascript")
 
