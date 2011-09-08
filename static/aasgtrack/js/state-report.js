@@ -242,7 +242,7 @@ function makeMapPanel() {
 		
 	// Build the panel that will live on the bottom of the right side
 	return new Ext.Panel({
-		title: 'Map View <a href="/track/map">(Click here for the nationwide map)</a>',
+		title: 'Map View <a href="http://stategeothermaldata.org/progress/aasg_tracking_map">(Click here for the nationwide map)</a>',
 		region: 'south',
 		margins: '0 0 0 0',
 		height: 347,
