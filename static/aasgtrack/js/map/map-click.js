@@ -3,8 +3,7 @@ var popup;
 function buildPopup(state, category, feature, map) {
 	url = "/track/" + state + "/popup/" + category;
 	if (category == "all") {
-		//url = "/track/" + state + "/popup/"
-		return;
+		url = "/track/" + state + "/popup/"
 	}
 	
 	if (popup != null) {

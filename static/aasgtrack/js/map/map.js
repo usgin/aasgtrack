@@ -37,7 +37,7 @@ function init() {
 	}
 	
 	// Add the function for handling point-click events -- function defined in map-builder.js
-	addClickEvent(g_maps);
+	//addClickEvent(g_maps);
 	
 	// Add the function for highlighting points as you hover on them
 	addHoverEvent(g_maps);
