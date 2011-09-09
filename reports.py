@@ -31,15 +31,16 @@ def all_data(request):
             categoryCompletedDeliverables = 0
             
             these_deliverables = Deliverable.objects.filter(state=this_state).filter(category=category)
-            if len(these_deliverables) == 0: continue
+            if these_deliverables.count() == 0: continue
             
-            these_submissions = Submission.objects.filter(satisfies_deliverable__in=these_deliverables)
+            these_submissions = Submission.objects.filter(satisfies_deliverable__in=these_deliverables).distinct()
             
             record = { 'state': this_state.abbreviation, 'state_name': this_state.name, 'category': CATEGORIES.get(category) }
-            record['deliverableCount'] = len(these_deliverables)
             
             satisfied, total = completed_deliverables(this_state, category)
+            record['deliverableCount'] = total
             record['deliverablesComplete'] = satisfied
+            
             categoryCompletedDeliverables = categoryCompletedDeliverables + satisfied
             stateCompletedDeliverables = stateCompletedDeliverables + satisfied
             grandTotalDeliverables = grandTotalDeliverables + satisfied
@@ -51,12 +52,12 @@ def all_data(request):
                 record['recentSubmission'] = 'None'
                 
             # Count the number of records available online
-            
-            for online_submission in these_submissions.filter(status__in=['online']):
+            for online_submission in these_submissions.filter(status__in=['online', 'approved']):
                 if online_submission.number_of_records:
-                    categoryRecordCount = categoryRecordCount + online_submission.number_of_records
-                    stateTotalRecords = stateTotalRecords + categoryRecordCount
-                    grandTotalRecords = grandTotalRecords + categoryRecordCount
+                    record_count = online_submission.number_of_records
+                    categoryRecordCount = categoryRecordCount + record_count
+                    stateTotalRecords = stateTotalRecords + record_count
+                    grandTotalRecords = grandTotalRecords + record_count
                     
             record['onlineCount'] = categoryRecordCount
             
@@ -65,10 +66,11 @@ def all_data(request):
             records.append(record)
             
         # Create a "summary" record for this state
+        total_state_deliverables = this_state.deliverable_set.all().count()
         record = { 'state': this_state.abbreviation, 'state_name': this_state.name, 'category': 'Totals for ' + this_state.name }
-        record['deliverableCount'] = len(this_state.deliverable_set.all())
+        record['deliverableCount'] = total_state_deliverables
         record['deliverablesComplete'] = stateCompletedDeliverables
-        record['completion'] = ( float(stateCompletedDeliverables) / len(this_state.deliverable_set.all()) ) * 100
+        record['completion'] = ( float(stateCompletedDeliverables) / total_state_deliverables ) * 100
         record['onlineCount'] = stateTotalRecords
         record['summary'] = True
         

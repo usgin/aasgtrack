@@ -25,7 +25,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         )
         
     list_filter = ['status', 'state']
-    list_display = ['__unicode__', 'date_submitted', 'status']
+    list_display = ['__unicode__', 'date_submitted', 'status', 'number_of_records']
     filter_horizontal = ['satisfies_deliverable']
     
     inlines = [CommentInline]
