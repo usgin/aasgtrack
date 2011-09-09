@@ -14,8 +14,13 @@
 	white-space: normal;
 	text-align: justify;
 	text-indent: 10px;
+	width: 400px;
 }
 
 .x-panel-tbar {
 	background-color: white;
+}
+
+.x-menu-plain {
+	width: 406px !important;
 }
