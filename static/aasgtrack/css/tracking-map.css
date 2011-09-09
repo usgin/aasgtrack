@@ -15,3 +15,7 @@
 	text-align: justify;
 	text-indent: 10px;
 }
+
+.x-panel-tbar {
+	background-color: white;
+}
