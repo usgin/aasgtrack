@@ -13,7 +13,7 @@ function changeWfsStyle(category) {
 	// Change the legend panel
 	panels[panels.length - 1].body.applyStyles({ background: 'url("' + legendBaseUrl + category + '-legend.png")' });
 }
-		
+
 function init() {
 	OpenLayers.ProxyHost = 'proxy?url=';
 	
@@ -50,11 +50,12 @@ function init() {
         layout: "border",
         renderTo: "map",
         defaults: { autoScroll: true },			    
-        items: [ 
+        items: [              
                  { 
                 	 layout: "absolute",
                 	 region: "center",
                 	 items: panels,
+                	 tbar: tutorialToolbar,
                 	 bodyStyle: 'border: none;'
         		 }
         ], 	  

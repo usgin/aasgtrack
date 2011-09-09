@@ -1,0 +1,16 @@
+#map-info-toolbar {
+	border: 1px solid black;
+	border-bottom: none;
+}
+
+.map-info-tool {
+	font-weight: bold !important;
+	padding-top: 0px !important;
+	font-size: 1.1em !important;
+}
+
+.map-info-text {
+	white-space: normal;
+	text-align: justify;
+	text-indent: 10px;
+}
