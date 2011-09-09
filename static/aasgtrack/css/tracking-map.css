@@ -1,6 +1,7 @@
 #map-info-toolbar {
 	border: 1px solid black;
 	border-bottom: none;
+	width: 978px !important;
 }
 
 .map-info-tool {

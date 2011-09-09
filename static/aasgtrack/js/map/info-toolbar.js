@@ -1,6 +1,5 @@
 var panelStyle = "font-size: 1.1em; padding: 5px; line-height: 125%;";
 var tutorialToolbar = new Ext.Toolbar({
-	width: 984,
 	buttonAlign: 'center',
 	id: "map-info-toolbar",
 	defaults: {
