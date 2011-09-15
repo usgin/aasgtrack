@@ -15,7 +15,7 @@ var tutorialToolbar = new Ext.Toolbar({
         		items: [
     		        {
     		        	xtype: 'panel',
-    		        	html: "Data being provided by each state has been categorized into eight different themes, as indicated by the legend near the bottom of the map. Clicking on one of the colored dots on the legend will cause many of the states to become colored. The range of colors that appear indicate how far along each state is in the completion of their data deliverables in the theme that was selected. For a broad report summarizing the data collection across all eight themes and all 50 states, <strong><a href='http://services.usgin.org/track/report/'>click here</a></strong>." ,    		        	
+    		        	html: "Data being provided by each state has been categorized into eight different themes, as indicated by the legend near the bottom of the map. Clicking on one of the colored dots on the legend will cause many of the states to become colored. The range of colors that appear indicate how far along each state is in the completion of their data deliverables in the theme that was selected. For a broad report summarizing the data collection across all eight themes and all 50 states, <strong><a href='http://services.usgin.org/track/report/' target='_blank'>click here</a></strong>." ,    		        	
     		        	cls: 'map-info-text',
     		        	bodyStyle: panelStyle
     		        }
