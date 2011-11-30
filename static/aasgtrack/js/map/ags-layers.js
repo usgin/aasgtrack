@@ -18,7 +18,8 @@ function ags93BackgroundLayer(name) {
 		name,
 		"http://services.azgs.az.gov/ArcGIS/rest/services/baselayers/WorldBackground/MapServer/export",
 		{
-			layers: "0,1,2"			
+			layers: "0,1,2",
+			format: "png24"
 		},
 		{
 			singleTile: true
