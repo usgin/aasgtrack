@@ -46,6 +46,7 @@ function makeMainGridPanel() {
 		    {name: 'submissionSubDate', type: 'date', dateFormat: 'Y-m-d'},
 		    {name: 'submissionComments'},
 		    {name: 'submissionTitle'},
+		    {name: 'submissionRecords'},
 		    {name: 'noExpansion'}
 		]
 	});
