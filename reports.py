@@ -194,6 +194,7 @@ def state_data(request):
             record['submissionStatDate'] = submission.status_date.isoformat()
             record['submissionSubDate'] = submission.date_submitted.isoformat()
             record['submissionTitle'] = submission.title
+            record['submissionRecords'] = submission.number_of_records
             
             # Add information to the record about comments on the submission
             record['submissionComments'] = []

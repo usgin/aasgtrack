@@ -87,7 +87,8 @@ function makeMainGridPanel() {
 			    {id: 'deliverableName', header: 'Deliverable', sortable: true, dataIndex: 'deliverableName', hidden: true},
 			    {id: 'submissionTitle', header: 'Title', sortable: true, dataIndex: 'submissionTitle', css: 'font-weight: bold;'},
 			    {id: 'submissionSubDate', header: 'Submitted On', sortable: true, dataIndex: 'submissionSubDate', renderer: Ext.util.Format.dateRenderer('M j, Y')},
-			    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'}
+			    {id: 'submisionStatus', header: 'Status', sortable: true, dataIndex: 'submissionStatus'},
+			    {id: 'submissionRecords', header: 'No. of Records', sortable: true, dataIndex: 'submissionRecords'}
 			],
 			view: new Ext.grid.GroupingView({
 				forceFit: true,				
