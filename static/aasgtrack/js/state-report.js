@@ -65,7 +65,7 @@ function makeMainGridPanel() {
 	// Generate GridPanels within the same loop
 	stores = [];
 	gridPanels = [];
-	yearLookup = { 1: 'Year One', 2: 'Year Two', 3: 'Year Three', 4: 'Supplemental'}
+	yearLookup = { 1: 'Year One', 2: 'Year Two', 3: 'Year Three', 4: 'Supplemental', 5: 'Additional Data'}
 	for (i=0; i<=3; i++) {
 		// Create the store
 		stores[i] = new Ext.data.GroupingStore({

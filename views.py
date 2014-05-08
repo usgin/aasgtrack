@@ -69,6 +69,7 @@ def state_progress(request, state, context, category):
                           'deliv_2': deliverables.filter(year=2),
                           'deliv_3': deliverables.filter(year=3),
                           'deliv_4': deliverables.filter(year=4),
+						  'deliv_5': deliverables.filter(year=5),
                           'state': state,
                           'percent': percent}
     if category != None: additional_context['category'] = CATEGORIES[category]

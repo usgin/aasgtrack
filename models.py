@@ -39,7 +39,8 @@ for item in SUBMISSION_STATUS:
 YEARS = ((1, 'Year One'),
          (2, 'Year Two'),
          (3, 'Year Three'),
-         (4, 'Supplemental'))
+         (4, 'Supplemental')
+		 (5, 'Additional Data'))
 
 PROJECT_YEARS = dict()
 for item in YEARS:
